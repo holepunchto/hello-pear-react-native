@@ -3,6 +3,9 @@
 # dependencies
 node_modules/
 
+# bundles
+src/worker.bundle.js
+
 # Expo
 .expo/
 dist/
