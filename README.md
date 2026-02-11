@@ -16,3 +16,7 @@ npm run ios
 ```sh
 npm run android
 ```
+
+## LICENSE
+
+Apache-2.0

@@ -1,6 +1,5 @@
 {
   "name": "hello-pear-react-native",
-  "license": "0BSD",
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
@@ -8,12 +7,23 @@
     "android": "expo run:android",
     "ios": "expo run:ios"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/holepunchto/hello-pear-react-native.git"
+  },
+  "author": "Holepunch Inc",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/holepunchto/hello-pear-react-native/issues"
+  },
+  "homepage": "https://github.com/holepunchto/hello-pear-react-native",
   "dependencies": {
     "b4a": "^1.7.3",
     "bare-fs": "^4.5.3",
     "bare-path": "^3.0.0",
     "bare-rpc": "^1.1.0",
     "expo": "~54.0.33",
+    "expo-build-properties": "^1.0.10",
     "expo-status-bar": "~3.0.9",
     "pear-mobile": "^0.0.1",
     "react": "19.1.0",
