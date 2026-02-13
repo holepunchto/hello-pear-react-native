@@ -5,7 +5,9 @@
   "scripts": {
     "build": "npx bare-pack --host ios --host android --linked --out ./src/worker.bundle.js ./pearend/worker.js",
     "android": "npx expo run:android",
-    "ios": "npx expo run:ios"
+    "ios": "npx expo run:ios",
+    "lint": "prettier --check . && lunte",
+    "format": "prettier --write . && lunte --fix"
   },
   "repository": {
     "type": "git",
@@ -32,6 +34,9 @@
   },
   "devDependencies": {
     "@types/react": "~19.1.0",
+    "lunte": "^1.6.0",
+    "prettier": "^3.8.1",
+    "prettier-config-holepunch": "^2.0.0",
     "typescript": "~5.9.2"
   },
   "private": true
