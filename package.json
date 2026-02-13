@@ -4,8 +4,8 @@
   "main": "index.ts",
   "scripts": {
     "build": "npx bare-pack --host ios --host android --linked --out ./src/worker.bundle.js ./pearend/worker.js",
-    "android": "expo run:android",
-    "ios": "expo run:ios"
+    "android": "npx expo run:android",
+    "ios": "npx expo run:ios"
   },
   "repository": {
     "type": "git",
