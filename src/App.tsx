@@ -39,7 +39,7 @@ export default function App() {
     runtime.applyUpdate()
   })
   const IPC = runtime.run('/worker.bundle', bundle, [])
-  new RPC(IPC, (req) =>{
+  new RPC(IPC, (req) => {
     if (req.command === 0) {
       const parsed = b4a.toString(req.data)
       setMessage(parsed)
@@ -48,9 +48,9 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>{message}</Text>
-      <StatusBar style="auto" />
+      <StatusBar style='auto' />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
