@@ -1,8 +1,24 @@
 ## Setup OTA
 
-How to setup Over The Air updates with Pear
+How to setup Over The Air updates with Pear from an empty expo project
 
-### Replace code
+### Edit Code
+
+#### `./metro.config.js`
+
+Add `mergeConfig` and `getDefaultConfig` from `@react-native/metro-config` to metro config and merge configs if applicable.
+
+```js
+const { getDefaultConfig: getExpoConfig } = require('expo/metro-config')
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config')
+
+const expoConfig = getExpoConfig(__dirname)
+const rnConfig = getDefaultConfig(__dirname)
+
+module.exports = mergeConfig(rnConfig, expoConfig)
+```
+
+---
 
 #### `./src/App.tsx`
 
