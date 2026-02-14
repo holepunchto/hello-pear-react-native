@@ -1,6 +1,7 @@
 {
   "name": "hello-pear-react-native",
   "version": "1.0.0",
+  "upgrade": "pear://srbd5ynke8idsjbikxia43u13wywjy4sg6mcmqa7urczzr7dxdzy",
   "main": "index.ts",
   "scripts": {
     "build": "npx bare-pack --host ios --host android --linked --out ./src/worker.bundle.js ./pearend/worker.js",
@@ -27,7 +28,7 @@
     "expo": "~54.0.33",
     "expo-build-properties": "^1.0.10",
     "expo-status-bar": "~3.0.9",
-    "pear-mobile": "^0.0.1",
+    "pear-mobile": "file:../pear-mobile/pear-mobile-0.0.1.tgz",
     "react": "19.1.0",
     "react-native": "0.81.5",
     "react-native-bare-kit": "^0.12.0"

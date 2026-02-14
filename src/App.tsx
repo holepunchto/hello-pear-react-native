@@ -5,11 +5,12 @@ import PearRuntime from 'pear-mobile'
 import RPC from 'bare-rpc'
 import b4a from 'b4a'
 import bundle from './worker.bundle.js'
+import { version, upgrade } from '../package.json'
 
 export default function App() {
   const [message, setMessage] = useState('')
 
-  const runtime = new PearRuntime()
+  const runtime = new PearRuntime({ upgrade, version })
   const IPC = runtime.run('/worker.bundle', bundle, [])
   new RPC(IPC, (req) => {
     if (req.command === 0) {
