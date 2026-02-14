@@ -1,10 +1,10 @@
-# Setup OTA
+## Setup OTA
 
 How to setup Over The Air updates with Pear
 
-## Replace code
+### Replace code
 
-### `./src/App.tsx`
+#### `./src/App.tsx`
 
 Add the following at top of the file:
 
@@ -64,7 +64,7 @@ useEffect(() => {
 }, [])
 ```
 ---
-### `(on iOS) ./ios/<appname>/AppDelegate.swift`
+#### `(on iOS) ./ios/<appname>/AppDelegate.swift`
 
 Replace the bundleURL function with the following:
 
@@ -85,7 +85,7 @@ override func bundleURL() -> URL? {
 }
 ```
 ---
-### `(on android) ./android/app/src/main/java/com/anonymous/<appname>/MainApplication.kt`
+#### `(on android) ./android/app/src/main/java/com/anonymous/<appname>/MainApplication.kt`
 
 Add this at the top of the file:
 
@@ -128,9 +128,9 @@ object : DefaultReactNativeHost(this) {
 }
 ```
 
-## Distribute
+### Distribute
 
-### `Setup`
+#### `Setup`
 
 Run the following to get a hash key:
 
@@ -147,7 +147,7 @@ Prepend the hash key with `pear://` Put the hash key in the `package.json`'s `up
 "upgrade": "pear://gaoyux1oteqzqy9qnutyoms4d7r4eqzau5csf9cg1hrp8pn4hnso",
 ```
 ---
-### `Prepare Payload`
+#### `Prepare Payload`
 
 Create the React-Native app bundle:
 
@@ -167,7 +167,7 @@ Copy the package.json:
 cp -f package.json dist/package.json
 ```
 ---
-### `Stare and Seed`
+#### `Stare and Seed`
 
 Stage the payload
 
@@ -181,7 +181,7 @@ Seed the payload
 pear seed pear://gaoyux1oteqzqy9qnutyoms4d7r4eqzau5csf9cg1hrp8pn4hnso
 ```
 
-### `Run production test`
+#### `Run production test`
 
 ```sh
 npx expo run:ios --configuration Release
