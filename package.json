@@ -1,13 +1,15 @@
 {
   "name": "hello-pear-react-native",
   "version": "1.0.0",
-  "upgrade": "pear://gaoyux1oteqzqy9qnutxoml4d7r4eqzau5csf9cg1hrp8pn4hnso",
+  "upgrade": "pear://6icyde363aziow3ouwerwo1meh9cy8r41m83zzr4fo4aux4iaudy",
   "main": "index.ts",
   "scripts": {
     "pack": "npx bare-pack --host ios --host android --linked --out ./src/worker.bundle.js ./pearend/worker.js",
     "update": "npx react-native bundle --platform ios --dev false --entry-file index.ts --bundle-output dist/runtime.ios.bundle --assets-dest dist/assets && npx react-native bundle --platform android --dev false --entry-file index.ts --bundle-output dist/runtime.android.bundle --assets-dest dist/assets && cp -f package.json dist/package.json",
     "android": "expo run:android",
-    "ios": "expo run:ios"
+    "ios": "expo run:ios",
+    "production:ios": "npx expo run:ios --configuration Release",
+    "production:android": "npx expo run:android --configuration Release"
   },
   "repository": {
     "type": "git",
@@ -22,17 +24,11 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
     "b4a": "^1.7.3",
-    "bare-fs": "^4.5.3",
-    "bare-path": "^3.0.0",
     "bare-rpc": "^1.1.0",
     "expo": "~54.0.33",
     "expo-build-properties": "^1.0.10",
     "expo-status-bar": "~3.0.9",
-    "expo-updates": "~29.0.16",
-    "hypercore-id-encoding": "^1.3.0",
-    "localdrive": "^2.2.0",
-    "pear-link": "^4.2.1",
-    "pear-mobile": "^0.1.0-rc",
+    "pear-mobile": "^0.1.1-rc",
     "react": "19.1.0",
     "react-native": "0.81.5",
     "react-native-bare-kit": "^0.12.0"

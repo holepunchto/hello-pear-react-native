@@ -82,6 +82,8 @@ useEffect(() => {
 ---
 #### `(on iOS) ./ios/<appname>/AppDelegate.swift`
 
+Run `npx expo prebuild --platform ios` if you dont have the ios folder yet.
+
 Replace the bundleURL function with the following:
 
 ```swift
@@ -98,10 +100,12 @@ override func bundleURL() -> URL? {
 
     return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
 #endif
-}
+  }
 ```
 ---
 #### `(on android) ./android/app/src/main/java/com/anonymous/<appname>/MainApplication.kt`
+
+Run `npx expo prebuild --platform anroid` if you dont have the ios folder yet.
 
 Add this at the top of the file:
 

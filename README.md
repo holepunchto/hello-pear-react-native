@@ -49,7 +49,7 @@ Uses: `npx bare-pack --host ios --host android --linked --out ./src/worker.bundl
 
 #### `npm run update`
 
-Creates iOS and android bundle and copies package.json all to the dist folder.
+Creates iOS and android bundles and copies package.json all to the dist folder.
 
 ```sh
 npm run update
@@ -119,10 +119,12 @@ How to setup Over The Air updates with Pear
 
 #### `(on iOS) ./ios/<appname>/AppDelegate.swift`
 
+Run `npx expo prebuild --platform ios` if you dont have the ios folder yet.
+
 Replace the bundleURL function with the following:
 
 ```swift
-override func bundleURL() -> URL? {
+    override func bundleURL() -> URL? {
 #if DEBUG
     return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: ".expo/.virtual-metro-entry")
 #else
@@ -135,10 +137,12 @@ override func bundleURL() -> URL? {
 
     return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
 #endif
-}
+    }
 ```
 ---
 #### `(on android) ./android/app/src/main/java/com/anonymous/<appname>/MainApplication.kt`
+
+Run `npx expo prebuild --platform android` if you dont have the ios folder yet.
 
 Add this at the top of the file:
 
@@ -234,11 +238,15 @@ pear seed pear://gaoyux1oteqzqy9qnutyoms4d7r4eqzau5csf9cg1hrp8pn4hnso
 #### `Run production test`
 
 ```sh
-npx expo run:ios --configuration Release
+npm run production:ios
+```
+and/or
+```sh
+npm run productions:android
 ```
 Make changes to the project.
 
-Then go through the `Prepare Payload` step and stage.
+Then go through the [`Prepare Payload`](#prepare-payload) step and stage.
 
 The payload shoudl still be seeded.
 
