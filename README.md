@@ -119,7 +119,7 @@ How to setup Over The Air updates with Pear
 
 #### `(on iOS) ./ios/<appname>/AppDelegate.swift`
 
-Run `npx expo prebuild --platform ios` if you dont have the ios folder yet.
+Run `npx expo prebuild --platform ios` if thre is no ios folder yet.
 
 Replace the bundleURL function with the following:
 
@@ -142,7 +142,7 @@ Replace the bundleURL function with the following:
 ---
 #### `(on android) ./android/app/src/main/java/com/anonymous/<appname>/MainApplication.kt`
 
-Run `npx expo prebuild --platform android` if you dont have the android folder yet.
+Run `npx expo prebuild --platform android` if there is no android folder yet.
 
 Add this at the top of the file:
 
@@ -150,7 +150,7 @@ Add this at the top of the file:
 import java.io.File
 ```
 
-And replace you `DefaultReactNativeHost` object with the following:
+And replace the `DefaultReactNativeHost` object with the following:
 
 ```kt
 object : DefaultReactNativeHost(this) {
