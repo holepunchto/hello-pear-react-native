@@ -4,7 +4,7 @@
   "upgrade": "pear://srbd5ynke8idsjbikxia43u13wywjy4sg6mcmqa7urczzr7dxdzy",
   "main": "index.ts",
   "scripts": {
-    "build": "npx bare-pack --host ios --host android --linked --out ./src/worker.bundle.js ./pearend/worker.js",
+    "pack": "npx bare-pack --host ios --host android --linked --out ./src/worker.bundle.js ./pearend/worker.js",
     "android": "npx expo run:android",
     "ios": "npx expo run:ios",
     "lint": "prettier --check . && lunte",

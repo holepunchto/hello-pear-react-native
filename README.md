@@ -32,7 +32,7 @@ npm install
 
 ## Scripts
 
-### `npm run build`
+### `npm run pack`
 
 Create the pear end bundle used to start the BareKit Worklet
 
@@ -40,7 +40,7 @@ Create the pear end bundle used to start the BareKit Worklet
 > Required prebuild step.
 
 ```sh
-npm run build
+npm run pack
 ```
 
 Uses: `npx bare-pack --host ios --host android --linked --out ./src/worker.bundle.js ./pearend/worker.js`
