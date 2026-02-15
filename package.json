@@ -1,7 +1,7 @@
 {
   "name": "hello-pear-react-native",
-  "version": "1.0.0",
-  "upgrade": "pear://6icyde363aziow3ouwerwo1meh9cy8r41m83zzr4fo4aux4iaudy",
+  "version": "1.0.1",
+  "upgrade": "pear://63q7dntwuuhezphua17491iaziibdp5axmkrrbqixzpdwjjs65zo",
   "main": "index.ts",
   "scripts": {
     "pack": "npx bare-pack --host ios --host android --linked --out ./src/worker.bundle.js ./pearend/worker.js",
@@ -9,7 +9,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "production:ios": "npx expo run:ios --configuration Release",
-    "production:android": "npx expo run:android --configuration Release"
+    "production:android": "npx expo run:android --variant release"
   },
   "repository": {
     "type": "git",
