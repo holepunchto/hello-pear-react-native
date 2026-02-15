@@ -142,7 +142,7 @@ Replace the bundleURL function with the following:
 ---
 #### `(on android) ./android/app/src/main/java/com/anonymous/<appname>/MainApplication.kt`
 
-Run `npx expo prebuild --platform android` if you dont have the ios folder yet.
+Run `npx expo prebuild --platform android` if you dont have the android folder yet.
 
 Add this at the top of the file:
 
