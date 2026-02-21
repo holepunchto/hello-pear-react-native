@@ -1,13 +1,14 @@
 {
   "name": "hello-pear-react-native",
-  "version": "1.0.1",
+  "version": "1.0.19",
   "upgrade": "pear://63q7dntwuuhezphua17491iaziibdp5axmkrrbqixzpdwjjs65zo",
   "main": "index.ts",
   "scripts": {
-    "pack": "npx bare-pack --host ios --host android --linked --out ./src/worker.bundle.js ./pearend/worker.js",
-    "update": "npx react-native bundle --platform ios --dev false --entry-file index.ts --bundle-output dist/runtime.ios.bundle --assets-dest dist/assets && npx react-native bundle --platform android --dev false --entry-file index.ts --bundle-output dist/runtime.android.bundle --assets-dest dist/assets && cp -f package.json dist/package.json",
+    "pack": "npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./pearend/worker.js",
+    "update": "npx react-native bundle --platform ios --dev false --entry-file index.ts --bundle-output dist/by-arch/ios-arm64/app/app.bundle --assets-dest dist/by-arch/ios-arm64/app && npx react-native bundle --platform android --dev false --entry-file index.ts --bundle-output dist/by-arch/android-arm64/app/app.bundle --assets-dest dist/by-arch/android-arm64/app && cp -rf dist/by-arch/ios-arm64/app/* dist/by-arch/ios-arm64-simulator/app && cp -rf dist/by-arch/ios-arm64/app/* dist/by-arch/ios-x64-simulator/app && cp -f package.json dist/package.json",
     "android": "expo run:android",
     "ios": "expo run:ios",
+    "prebuild": "npx expo prebuild",
     "production:ios": "npx expo run:ios --configuration Release",
     "production:android": "npx expo run:android --variant release"
   },
@@ -28,7 +29,8 @@
     "expo": "~54.0.33",
     "expo-build-properties": "^1.0.10",
     "expo-status-bar": "~3.0.9",
-    "pear-mobile": "^0.1.1-rc",
+    "pear-mobile": "^0.0.4",
+    "pear-runtime-react-native": "^1.0.1",
     "react": "19.1.0",
     "react-native": "0.81.5",
     "react-native-bare-kit": "^0.12.0"
@@ -37,6 +39,7 @@
     "@react-native-community/cli": "latest",
     "@react-native/metro-config": "^0.84.0",
     "@types/react": "~19.1.0",
+    "bare-pack": "^2.0.0",
     "lunte": "^1.6.0",
     "prettier": "^3.8.1",
     "prettier-config-holepunch": "^2.0.0",

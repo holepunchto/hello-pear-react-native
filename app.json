@@ -8,6 +8,7 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "plugins": [
+      ["pear-runtime-react-native/plugin"],
       [
         "expo-build-properties",
         {
