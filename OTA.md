@@ -26,7 +26,6 @@ Add the following at top of the file:
 
 ```js
 import { useEffect } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Platform } from 'react-native'
 import { version, upgrade } from '../package.json'
 

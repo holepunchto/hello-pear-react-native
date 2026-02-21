@@ -23,8 +23,7 @@
   },
   "homepage": "https://github.com/holepunchto/hello-pear-react-native",
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^2.2.0",
-    "b4a": "^1.7.3",
+    "b4a": "^1.8.0",
     "bare-rpc": "^1.1.0",
     "expo": "~54.0.33",
     "expo-build-properties": "^1.0.10",
@@ -36,7 +35,7 @@
     "react-native-bare-kit": "^0.12.0"
   },
   "devDependencies": {
-    "@react-native-community/cli": "latest",
+    "@react-native-community/cli": "^20.1.1",
     "@react-native/metro-config": "^0.84.0",
     "@types/react": "~19.1.0",
     "bare-pack": "^2.0.0",
