@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect, use } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View } from 'react-native'
-import PearRuntime from 'pear-mobile'
+import PearRuntime from 'pear-runtime-react-native'
 
 import RPC from 'bare-rpc'
 import b4a from 'b4a'
@@ -11,24 +11,25 @@ export default function App() {
   const [message, setMessage] = useState('')
   const [currentVersion, setCurrentVersion] = useState('')
 
-  const pear = new PearRuntime()
-  const IPC = pear.run('/worker.bundle', bundle)
-
-  new RPC(IPC, (req) => {
-    if (req.command === 0) {
-      const parsed = b4a.toString(req.data)
-      setCurrentVersion(parsed)
-    }
-    if (req.command === 1) {
-      const parsed = b4a.toString(req.data)
-      setMessage(parsed)
-    }
-  })
+  useEffect(() =>{
+    const pear = new PearRuntime()
+    const IPC = pear.run('/worker.bundle', bundle)
+    
+    new RPC(IPC, (req) => {
+      if (req.command === 0) {
+        const parsed = b4a.toString(req.data)
+        setCurrentVersion(parsed)
+      }
+      if (req.command === 1) {
+        const parsed = b4a.toString(req.data)
+        setMessage(parsed)
+      }
+    })
+  }, [])
 
   return (
     <View style={styles.container}>
-      <Text>Hello World!</Text>
-      <Text>{currentVersion === '' ? 'Checking version...' : `Version ${currentVersion}`}</Text>
+      <Text>{currentVersion === '' ? 'Checking version...' : currentVersion === 'update' ? 'Update Available! (restart to update)' : `Version ${currentVersion}`}</Text>
       <Text>{message}</Text>
       <StatusBar style="auto" />
     </View>

@@ -61,7 +61,7 @@ Creates iOS and android bundles and copies package.json all to the dist folder.
 npm run update
 ```
 
-Uses: `npx react-native bundle --platform ios --dev false --entry-file index.ts --bundle-output dist/by-arch/ios-arm64/app/app.bundle --assets-dest dist/by-arch/ios-arm64/app && npx react-native bundle --platform android --dev false --entry-file index.ts --bundle-output dist/by-arch/android-arm64/app/app.bundle --assets-dest dist/by-arch/android-arm64/app && cp -rf dist/by-arch/ios-arm64/app/* dist/by-arch/ios-arm64-simulator/app && cp -rf dist/by-arch/ios-arm64/app/* dist/by-arch/ios-x64-simulator/app && cp -f package.json dist/package.json`
+Uses: `npx react-native bundle --platform ios --dev false --entry-file index.ts --bundle-output dist/by-arch/ios-arm64/app/app.bundle --assets-dest dist/by-arch/ios-arm64/app && npx react-native bundle --platform android --dev false --entry-file index.ts --bundle-output dist/by-arch/android-arm64/app/app.bundle --assets-dest dist/by-arch/android-arm64/app && mkdir -p dist/by-arch/ios-arm64-simulator/app dist/by-arch/ios-x64-simulator/app && cp -rf dist/by-arch/ios-arm64/app/* dist/by-arch/ios-arm64-simulator/app && cp -rf dist/by-arch/ios-arm64/app/* dist/by-arch/ios-x64-simulator/app && cp -f package.json dist/package.json`
 
 Note: react native creates architecture-agnostic bundles, so we can just copy the hosts if they are the same platform (eg: ios-arm64 , ios-arm64-simulator)
 
@@ -137,7 +137,7 @@ An update occurs when a seeded application drive is written to.
 
 When an update occurs, the instance will emit two events `updating` and `updated`.
 
-**pear-mobile is used only in the Bare worklet** (e.g. `pearend/worker.js`). The view layer (e.g. `App.tsx`) only starts that worklet as a bundle via `runtime.run()`; it does not use pear-mobile for OTA. In the worklet, create the runtime with `version` and `upgrade`, listen for events, and call `applyUpdate()` on `updated` so the new bundle is used on next launch:
+**pear-mobile is used only in the Bare worklet** (e.g. `pearend/worker.js`). The view layer (e.g. `App.tsx`) only starts that worklet as a bundle via `runtime.run()` using `pear-runtime-react-native`. In the worklet, create the runtime with `version` and `upgrade`, listen for events, and call `applyUpdate()` on `updated` so the new bundle is used on next launch:
 
 ```js
 const runtime = new PearRuntime({ version, upgrade })
@@ -148,7 +148,7 @@ runtime.on('updated', () => {
 
 ### Disabling Updates
 
-To disable updates as an application default, ensure the options passed to `PearRuntime` include the package and set the `updates` field to `false` (e.g. extract options from `package.json` : `{ version, upgrade, updates }`)
+To disable updates as an application default, ensure the options passed to `PearRuntime` of `pear-mobile` include the package and set the `updates` field to `false` (e.g. extract options from `package.json` : `{ version, upgrade, updates }`)
 
 ```json
 {
@@ -164,11 +164,12 @@ Storage is provided by **pear-mobile in the Bare worklet**. The `PearRuntime` in
 
 ## Workers
 
-Application peer-to-peer logic runs in a worker that acts as a local backend for the view layer. The worker is bundled with Bare and started via the runtime in react-native View.
+Application peer-to-peer logic runs in a worker that acts as a local backend for the view layer. The worker is bundled with Bare and started via the runtime in react-native View using `pear-runtime-react-native`.
 
 **View layer** (e.g. `src/App.tsx`): the runtime is used only to start the worklet. No `dir` or storage is passed; the worklet gets storage from pear-mobile.
 
 ```js
+const PearRuntime = require('pear-runtime-react-native')
 const pear = new PearRuntime()
 const IPC = pear.run('/worker.bundle', bundle)
 IPC.on('data', (data) => {
@@ -177,7 +178,7 @@ IPC.on('data', (data) => {
 IPC.write('hello')
 ```
 
-**Worker** (e.g. `pearend/worker.js`), executed with an embedded Bare runtime. The other side of the IPC stream is `Bare.IPC`. Use the pear-mobile `PearRuntime` instance for OTA and for storage paths (`pear.dir`, `pear.storage`).
+Inside the worker (worklet), the other side of the IPC stream is `Bare.IPC`. Use the pear-mobile `PearRuntime` instance for OTA and for storage paths (`pear.dir`, `pear.storage`).
 
 ```js
 const { IPC } = Bare
