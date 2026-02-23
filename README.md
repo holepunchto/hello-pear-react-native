@@ -137,12 +137,12 @@ An update occurs when a seeded application drive is written to.
 
 When an update occurs, the instance will emit two events `updating` and `updated`.
 
-**pear-mobile is used only in the Bare worklet** (e.g. `pearend/worker.js`). The view layer (e.g. `App.tsx`) only starts that worklet as a bundle via `runtime.run()` using `pear-runtime-react-native`. In the worklet, create the runtime with `version` and `upgrade`, listen for events, and call `applyUpdate()` on `updated` so the new bundle is used on next launch:
+**pear-mobile is used only in the Bare worklet** (e.g. `pearend/worker.js`). The view layer (e.g. `App.tsx`) only starts that worklet as a bundle via `pear.run()` using `pear-runtime-react-native`. In the worklet, create the runtime with `version` and `upgrade`, listen for events, and call `applyUpdate()` on `updated` so the new bundle is used on next launch:
 
 ```js
-const runtime = new PearRuntime({ version, upgrade })
-runtime.on('updated', () => {
-  runtime.applyUpdate()
+const pear = new PearRuntime({ version, upgrade })
+pear.updater.on('updated', () => {
+  pear.updater.applyUpdate()
 })
 ```
 
@@ -186,18 +186,16 @@ const PearRuntime = require('pear-mobile')
 const { version, upgrade } = require('../package.json')
 
 const pear = new PearRuntime({ version, upgrade })
-// pear.storage – use as Corestore storage path
 
 Bare.IPC.on('data', (data) => console.log(data.toString()))
 Bare.IPC.write('Hello from worker')
 
 const Corestore = require('corestore')
 const corestore = new Corestore(pear.storage)
-// ... do more with corestore
 ```
 
 > [!CAUTION]  
-> Run `npm run pack` after changing the worker; the pack step produces the bundle consumed by `runtime.run()`.
+> Run `npm run pack` after changing the worker; the pack step produces the bundle consumed by `pear.run()`.
 
 ### Production Build
 
@@ -414,11 +412,11 @@ Distribute the app through your usual channels (stores, website, etc.). The `pea
 - Prepare payload: bump version, `npm run pack`, `npm run update`.
 - Write: Stage (and optionally Provision, then Multisign).
 
-When the application drive is written to, a running app receives `updating` then `updated`. In the worker, call `runtime.applyUpdate()` on `updated` so the new bundle is written under `pear-runtime/upgrade/`. After the user restarts the app, the native layer loads the OTA bundle from that path (see [Set up plugin](#set-up-plugin-load-ota-bundle)) and the updated app runs.
+When the application drive is written to, a running app receives `updating` then `updated`. In the worker, call `pear.applyUpdate()` on `updated` so the new bundle is written under `pear-runtime/upgrade/`. After the user restarts the app, the native layer loads the OTA bundle from that path (see [Set up plugin](#set-up-plugin-load-ota-bundle)) and the updated app runs.
 
 ### Storage and multiple instances
 
-Storage is determined by the runtime (e.g. `runtime.dir`). On device it is typically under the app’s documents or files directory. For development you can use a custom path if the runtime supports it (see pear-mobile docs). This is a conventional starting point; adjust per project (e.g. in-app storage location for users).
+Storage is determined by the runtime (e.g. `pear.updater.dir`). On device it is typically under the app’s documents or files directory. For development you can use a custom path if the runtime supports it (see pear-mobile docs). This is a conventional starting point; adjust per project (e.g. in-app storage location for users).
 
 ## LICENSE
 

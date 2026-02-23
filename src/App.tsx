@@ -11,10 +11,10 @@ export default function App() {
   const [message, setMessage] = useState('')
   const [currentVersion, setCurrentVersion] = useState('')
 
-  useEffect(() =>{
+  useEffect(() => {
     const pear = new PearRuntime()
     const IPC = pear.run('/worker.bundle', bundle)
-    
+
     new RPC(IPC, (req) => {
       if (req.command === 0) {
         const parsed = b4a.toString(req.data)
@@ -29,9 +29,15 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>{currentVersion === '' ? 'Checking version...' : currentVersion === 'update' ? 'Update Available! (restart to update)' : `Version ${currentVersion}`}</Text>
+      <Text>
+        {currentVersion === ''
+          ? 'Checking version...'
+          : currentVersion === 'update'
+            ? 'Update Available! (restart to update)'
+            : `Version ${currentVersion}`}
+      </Text>
       <Text>{message}</Text>
-      <StatusBar style="auto" />
+      <StatusBar style='auto' />
     </View>
   )
 }
@@ -41,6 +47,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'
+  }
 })

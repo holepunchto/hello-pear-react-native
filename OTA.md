@@ -78,7 +78,9 @@ useEffect(() => {
   confirmUpdate()
 }, [])
 ```
+
 ---
+
 #### `(on iOS) ./ios/<appname>/AppDelegate.swift`
 
 Run `npx expo prebuild --platform ios` if you dont have the ios folder yet.
@@ -101,7 +103,9 @@ override func bundleURL() -> URL? {
 #endif
   }
 ```
+
 ---
+
 #### `(on android) ./android/app/src/main/java/com/anonymous/<appname>/MainApplication.kt`
 
 Run `npx expo prebuild --platform anroid` if you dont have the ios folder yet.
@@ -165,17 +169,21 @@ Prepend the hash key with `pear://` Put the hash key in the `package.json`'s `up
 "version": "1.0.2",
 "upgrade": "pear://gaoyux1oteqzqy9qnutyoms4d7r4eqzau5csf9cg1hrp8pn4hnso",
 ```
+
 ---
+
 #### `Prepare Payload`
 
 Create the React-Native app bundle:
 
 `ios`
+
 ```sh
 npx react-native bundle --platform ios --dev false --entry-file index.ts --bundle-output dist/runtime.ios.bundle --assets-dest dist/assets
 ```
 
 `android`
+
 ```sh
 npx react-native bundle --platform android --dev false --entry-file index.ts --bundle-output dist/runtime.android.bundle --assets-dest dist/assets
 ```
@@ -185,7 +193,9 @@ Copy the package.json:
 ```sh
 cp -f package.json dist/package.json
 ```
+
 ---
+
 #### `Stare and Seed`
 
 Stage the payload
