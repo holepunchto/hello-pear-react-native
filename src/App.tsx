@@ -13,7 +13,7 @@ export default function App() {
 
   useEffect(() => {
     const pear = new PearRuntime()
-    const IPC = pear.run('/worker.bundle', bundle)
+    const IPC = pear.run('/worker.bundle', bundle, [__DEV__.toString()])
 
     new RPC(IPC, (req) => {
       if (req.command === 0) {

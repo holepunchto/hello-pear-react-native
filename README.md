@@ -38,7 +38,7 @@ npm install
 
 ## Scripts
 
-#### `npm run pack`
+#### `npm run bundle`
 
 Create the pear end bundle used to start the BareKit Worklet
 
@@ -46,7 +46,7 @@ Create the pear end bundle used to start the BareKit Worklet
 > Required prebuild step.
 
 ```sh
-npm run pack
+npm run bundle
 ```
 
 Uses: `npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./pearend/worker.js`
@@ -195,7 +195,7 @@ const corestore = new Corestore(pear.storage)
 ```
 
 > [!CAUTION]  
-> Run `npm run pack` after changing the worker; the pack step produces the bundle consumed by `pear.run()`.
+> Run `npm run bundle` after changing the worker; the bundle step produces the bundle consumed by `pear.run()`.
 
 ### Production Build
 
@@ -238,7 +238,7 @@ npm version <v>
 - Build the pearend worker bundle and the app bundles:
 
 ```sh
-npm run pack
+npm run bundle
 npm run update
 ```
 
@@ -409,7 +409,7 @@ Distribute the app through your usual channels (stores, website, etc.). The `pea
 ### Application update flow
 
 - Ensure the upgrade link is seeded.
-- Prepare payload: bump version, `npm run pack`, `npm run update`.
+- Prepare payload: bump version, `npm run bundle`, `npm run update`.
 - Write: Stage (and optionally Provision, then Multisign).
 
 When the application drive is written to, a running app receives `updating` then `updated`. In the worker, call `pear.applyUpdate()` on `updated` so the new bundle is written under `pear-runtime/upgrade/`. After the user restarts the app, the native layer loads the OTA bundle from that path (see [Set up plugin](#set-up-plugin-load-ota-bundle)) and the updated app runs.
