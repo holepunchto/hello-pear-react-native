@@ -38,32 +38,56 @@ npm install
 
 ## Scripts
 
-#### `npm run bundle`
+#### `npm run bundle:bare`
 
-Create the pear end bundle used to start the BareKit Worklet
+Create the pearend bundle used to start the BareKit Worklet
 
 > [!CAUTION]  
 > Required prebuild step.
 
 ```sh
-npm run bundle
+npm run bundle:bare
 ```
 
 Uses: `npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./pearend/worker.js`
 
 ---
 
+#### `npm run bundle:react-native`
+
+Creates iOS and android react-native bundles.
+
+```sh
+npm run bundle:react-native
+```
+
+Uses: `npx react-native bundle --platform ios --dev false --entry-file index.ts --bundle-output ota/ios/app.bundle --assets-dest ota/ios && npx react-native bundle --platform android --dev false --entry-file index.ts --bundle-output ota/android/app.bundle --assets-dest ota/android`
+
+---
+
+#### `npm run build`
+
+Creates a distribution-ready folder from react-native bundles.
+
+```sh
+npm run build
+```
+
+Uses: `npx pear-build --ios-arm64 ./ota/ios --ios-arm64-simulator ./ota/ios --ios-x64-simulator ./ota/ios --android-arm64 ./ota/android --package ./package.json --target dist`
+
+Note: react native creates architecture-agnostic bundles, so we can just use the hosts bundle if they are the same platform (eg: ios-arm64 , ios-arm64-simulator)
+
+---
+
 #### `npm run update`
 
-Creates iOS and android bundles and copies package.json all to the dist folder.
+Runs both bundle flows and the build flow to update distributions with the current code content.
 
 ```sh
 npm run update
 ```
 
-Uses: `npx react-native bundle --platform ios --dev false --entry-file index.ts --bundle-output dist/by-arch/ios-arm64/app/app.bundle --assets-dest dist/by-arch/ios-arm64/app && npx react-native bundle --platform android --dev false --entry-file index.ts --bundle-output dist/by-arch/android-arm64/app/app.bundle --assets-dest dist/by-arch/android-arm64/app && mkdir -p dist/by-arch/ios-arm64-simulator/app dist/by-arch/ios-x64-simulator/app && cp -rf dist/by-arch/ios-arm64/app/* dist/by-arch/ios-arm64-simulator/app && cp -rf dist/by-arch/ios-arm64/app/* dist/by-arch/ios-x64-simulator/app && cp -f package.json dist/package.json`
-
-Note: react native creates architecture-agnostic bundles, so we can just copy the hosts if they are the same platform (eg: ios-arm64 , ios-arm64-simulator)
+Uses: `npm run bundle:bare && npm run bundle:react-native && npm run build`
 
 ---
 
@@ -103,6 +127,30 @@ Uses: `npx expo run:android`
 
 ---
 
+#### `npm run production:ios`
+
+Runs the app in an iOS Simulator in production mode.
+
+```sh
+npm run production:ios
+```
+
+Uses: `npx expo run:ios --configuration Release`
+
+---
+
+#### `npm run production:android`
+
+Connects to SKD and runs the app in an Android Simulator in production mode.
+
+```sh
+npm run production:android
+```
+
+Uses: `npx expo run:android --variant release`
+
+---
+
 #### `npm run lint`
 
 Check formatting and linting.
@@ -111,10 +159,7 @@ Check formatting and linting.
 npm run lint
 ```
 
-Runs:
-
-- `prettier --check`
-- `lunte`
+Runs: `lunte`
 
 ---
 
@@ -126,10 +171,19 @@ Auto-format and fix lint issues.
 npm run format
 ```
 
-Runs:
+Runs: `prettier --write .`
 
-- `prettier --write .`
-- `lunte --fix`
+---
+
+#### `npm test`
+
+Format and Lint test.
+
+```sh
+npm run test
+```
+
+Runs: `prettier . --check && lunte`
 
 ## P2P OTA Updates
 
@@ -140,7 +194,7 @@ When an update occurs, the instance will emit two events `updating` and `updated
 **pear-mobile is used only in the Bare worklet** (e.g. `pearend/worker.js`). The view layer (e.g. `App.tsx`) only starts that worklet as a bundle via `pear.run()` using `pear-runtime-react-native`. In the worklet, create the runtime with `version` and `upgrade`, listen for events, and call `applyUpdate()` on `updated` so the new bundle is used on next launch:
 
 ```js
-const pear = new PearRuntime({ version, upgrade })
+const pear = new PearRuntime({ version, upgrade, app })
 pear.updater.on('updated', () => {
   pear.updater.applyUpdate()
 })
@@ -156,6 +210,23 @@ To disable updates as an application default, ensure the options passed to `Pear
   "updates": false,
   ...
 }
+```
+
+In this example we dynamically disable updates when we run in a developer enviornment (eg `npm run ios`) and enable when we are testing for release (eg `npm run production:ios`)
+
+```js
+/* ./src/App.tsx */
+
+// passing react-native's global __DEV__ boolean to the bare worklet
+const IPC = pear.run('/worker.bundle', bundle, [__DEV__.toString()])
+
+
+/* ./pearend/worker.js */
+
+// checking the value and passing boolean to PearRuntime as updates
+const isDev = Bare.argv.pop()
+const updates = isDev?.toLowerCase() === 'false' ? true : false
+const pear = new PearRuntime({ version, upgrade, app: appName, updates })
 ```
 
 ## Storage
@@ -273,7 +344,7 @@ So after `applyUpdate()` in the worklet writes the new bundle to `pear-runtime/u
 
 #### Build deploy directory
 
-The deploy directory is produced by `npm run update`: it is the project `dist/` folder. It must contain at least:
+The deploy directory is produced by `npm run build`: it is the project `dist/` folder. It must contain at least:
 
 ```
 dist/
