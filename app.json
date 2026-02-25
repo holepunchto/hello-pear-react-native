@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "hello-pear-react-native",
+    "name": "Hello Pear React Native",
     "slug": "hello-pear-react-native",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,6 +8,7 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "plugins": [
+      ["pear-runtime-react-native/plugin"],
       [
         "expo-build-properties",
         {
