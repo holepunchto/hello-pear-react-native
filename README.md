@@ -301,14 +301,13 @@ Use the `package.json` `version` field (SemVer). Bump the version before each pr
 npm version <v>
 ```
 
-#### Prepare Payload (React Native)
+#### Prepare Payload
 
 - Ensure `package.json` `author`, `license`, `description`, `name` are set as needed for distribution.
 - Bump version and ensure `upgrade` is set (see above).
-- Build the pearend worker bundle and the app bundles:
+- Build the pearend worker bundle, the app bundles and move them to the dist folder:
 
 ```sh
-npm run bundle
 npm run update
 ```
 
