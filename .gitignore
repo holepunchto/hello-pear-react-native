@@ -6,6 +6,10 @@ node_modules/
 # bundles
 src/worker.bundle.js
 
+# distribution
+dist/
+ota/
+
 # Expo
 .expo/
 dist/
@@ -53,7 +57,6 @@ node_modules/
 
 # Expo
 .expo/
-dist/
 web-build/
 expo-env.d.ts
 
