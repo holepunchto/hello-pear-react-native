@@ -220,7 +220,6 @@ In this example we dynamically disable updates when we run in a developer envior
 // passing react-native's global __DEV__ boolean to the bare worklet
 const IPC = pear.run('/worker.bundle', bundle, [__DEV__.toString()])
 
-
 /* ./pearend/worker.js */
 
 // checking the value and passing boolean to PearRuntime as updates
