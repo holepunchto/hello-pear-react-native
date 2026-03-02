@@ -1,8 +1,8 @@
 {
   "name": "hello-pear-react-native",
   "productName": "HelloPearReactNative",
-  "version": "1.0.0",
-  "upgrade": "pear://5mgha3gf4i3zhpmo9ioigwzxocmqaimq44xfdqmpirtnhbpfi9ry",
+  "version": "1.0.1",
+  "upgrade": "pear://qax696wuam4rc3out5fw3rfp67kzihgep8ypx1j94fxsp6nrjpto",
   "main": "index.ts",
   "scripts": {
     "bundle:bare": "npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./pearend/worker.js",
@@ -35,8 +35,8 @@
     "expo-build-properties": "^1.0.10",
     "expo-status-bar": "~3.0.9",
     "graceful-goodbye": "^1.3.3",
-    "pear-mobile": "^2.0.2",
-    "pear-runtime-react-native": "^1.0.1",
+    "pear-mobile": "^3.0.0",
+    "pear-runtime-react-native": "^2.0.1",
     "react": "19.1.0",
     "react-native": "0.81.5",
     "react-native-bare-kit": "^0.12.0"
