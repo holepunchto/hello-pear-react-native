@@ -1,13 +1,13 @@
 {
   "name": "hello-pear-react-native",
-  "productName": "HelloPearReactNative",
+  "productName": "HelloPear",
   "version": "1.0.1",
   "upgrade": "pear://qax696wuam4rc3out5fw3rfp67kzihgep8ypx1j94fxsp6nrjpto",
   "main": "index.ts",
   "scripts": {
     "bundle:bare": "npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./pearend/worker.js",
-    "bundle:react-native": "npx react-native bundle --platform ios --dev false --entry-file index.ts --bundle-output ota/ios/app.bundle --assets-dest ota/ios && npx react-native bundle --platform android --dev false --entry-file index.ts --bundle-output ota/android/app.bundle --assets-dest ota/android",
-    "build": "npx pear-build --ios-arm64 ./ota/ios --ios-arm64-simulator ./ota/ios --ios-x64-simulator ./ota/ios --android-arm64 ./ota/android --package ./package.json --target dist",
+    "bundle:react-native": "npx react-native bundle --platform ios --dev false --entry-file index.ts --bundle-output ota/ios/HelloPear/app.bundle --assets-dest ota/ios/HelloPear && npx react-native bundle --platform android --dev false --entry-file index.ts --bundle-output ota/android/HelloPear/app.bundle --assets-dest ota/android/HelloPear",
+    "build": "npx pear-build --ios-arm64 ./ota/ios/HelloPear --ios-arm64-simulator ./ota/ios/HelloPear --ios-x64-simulator ./ota/ios/HelloPear --android-arm64 ./ota/android/HelloPear --package ./package.json --target dist",
     "update": "npm run bundle:bare && npm run bundle:react-native && npm run build",
     "prebuild": "npx expo prebuild",
     "ios": "expo run:ios",
@@ -47,7 +47,7 @@
     "@types/react": "~19.1.0",
     "bare-pack": "^2.0.0",
     "lunte": "^1.6.0",
-    "pear-build": "^0.1.0",
+    "pear-build": "^0.1.1",
     "prettier": "^3.8.1",
     "prettier-config-holepunch": "^2.0.0",
     "typescript": "~5.9.2"
