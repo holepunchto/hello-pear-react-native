@@ -1,6 +1,6 @@
 {
   "name": "hello-pear-react-native",
-  "productName": "HelloPearReactNative",
+  "productName": "HelloPear",
   "version": "1.0.1",
   "upgrade": "pear://qax696wuam4rc3out5fw3rfp67kzihgep8ypx1j94fxsp6nrjpto",
   "main": "index.ts",
