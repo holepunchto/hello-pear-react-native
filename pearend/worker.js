@@ -16,6 +16,7 @@ const req = rpc.request(1)
 req.send('Hello from Worklet!👋🍐')
 
 const pear = new PearRuntime({ version, upgrade, app: appName, updates })
+pear.updater.on('error', (err) => console.error(err))
 pear.updater.on('updated', async () => {
   await pear.updater.applyUpdate()
   const req = rpc.request(0)
