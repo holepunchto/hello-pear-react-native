@@ -253,9 +253,9 @@ Inside the worker (worklet), the other side of the IPC stream is `Bare.IPC`. Use
 ```js
 const { IPC } = Bare
 const PearRuntime = require('pear-mobile')
-const { version, upgrade } = require('../package.json')
+const { version, upgrade, productName } = require('../package.json')
 
-const pear = new PearRuntime({ version, upgrade })
+const pear = new PearRuntime({ version, upgrade, name: productName })
 
 Bare.IPC.on('data', (data) => console.log(data.toString()))
 Bare.IPC.write('Hello from worker')
