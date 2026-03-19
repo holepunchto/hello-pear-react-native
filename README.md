@@ -253,15 +253,30 @@ Inside the worker (worklet), the other side of the IPC stream is `Bare.IPC`. Use
 ```js
 const { IPC } = Bare
 const PearRuntime = require('pear-mobile')
+const Corestore = require('corestore')
+const Hyperswarm = require('hyperswarm')
+const path = require('bare-path')
+const dir = require('bare-storage')
 const { version, upgrade, productName } = require('../package.json')
 
-const pear = new PearRuntime({ version, upgrade, name: productName })
+const pear = main()
+async function main() {
+  const store = new Corestore(path.join(dir.persistent(), 'pear-runtime/corestore'))
+  const keyPair = store.createKeyPair('someName')
+  const swarm = new Hyperswarm({ keyPair })
+  const pear = new PearRuntime({ version, upgrade, name: productName, store, swarm })
+  await pear.ready()
+  swarm.on('connection', (connection) => store.replicate(connection))
+  swarm.join(pear.updater.drive.core.discoveryKey, {
+    client: true,
+    server: false
+  })
+  return pear
+}
+pear.updater.on('updated', () => pear.updater.applyUpdate())
 
 Bare.IPC.on('data', (data) => console.log(data.toString()))
 Bare.IPC.write('Hello from worker')
-
-const Corestore = require('corestore')
-const corestore = new Corestore(pear.storage)
 ```
 
 > [!CAUTION]  

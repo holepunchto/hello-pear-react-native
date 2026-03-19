@@ -30,9 +30,9 @@ async function main() {
   const store = new Corestore(path.join(dir.persistent(), 'pear-runtime/corestore'))
   const keyPair = await store.createKeyPair('my-store')
   const swarm = new Hyperswarm({ keyPair })
-  
+
   const pear = new PearRuntime({ version, upgrade, name: appName, updates, swarm, store })
-  
+
   pear.updater.on('error', (err) => console.error(err))
   pear.updater.on('updated', async () => {
     await pear.updater.applyUpdate()
