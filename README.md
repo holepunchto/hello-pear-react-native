@@ -45,12 +45,12 @@ npm install
 > [!CAUTION]  
 > This step is required before running the app in any environment.
 
-
 ```sh
 npm run bundle:bare
 ```
 
 **What it does:** Packages the Pear worker for BareKit runtime using `bare-pack`:
+
 - Targets: iOS arm64, iOS arm64 simulator, iOS x64 simulator, Android arm64
 - Output: `./src/worker.bundle.js`
 
@@ -77,7 +77,6 @@ npm run android
 ```
 
 Uses: `npx expo run:android`
-
 
 ---
 
@@ -131,7 +130,7 @@ npm run ios
 
 Uses: `npx expo prebuild`
 
-----
+---
 
 ## Production Builds
 
