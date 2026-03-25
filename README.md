@@ -30,28 +30,58 @@ This boilerplate is MVP and Experimental.
 
 [more info](https://docs.expo.dev/versions/latest/#support-for-android-and-ios-versions)
 
-## Install
+## Installation
 
 ```sh
 npm install
 ```
 
-## Scripts
+---
 
-#### `npm run bundle:bare`
+## Build Scripts
 
-Create the pearend bundle used to start the BareKit Worklet
+### Pre-build: Create Bare Worklet Bundle
 
 > [!CAUTION]  
-> Required prebuild step.
+> This step is required before running the app in any environment.
+
 
 ```sh
 npm run bundle:bare
 ```
 
-Uses: `npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./pearend/worker.js`
+**What it does:** Packages the Pear worker for BareKit runtime using `bare-pack`:
+- Targets: iOS arm64, iOS arm64 simulator, iOS x64 simulator, Android arm64
+- Output: `./src/worker.bundle.js`
 
 ---
+
+#### `npm run ios`
+
+Runs the app in an iOS Simulator.
+
+```sh
+npm run ios
+```
+
+Uses: `npx expo run:ios`
+
+---
+
+#### `npm run android`
+
+Run the app in an Android Simulator.
+
+```sh
+npm run android
+```
+
+Uses: `npx expo run:android`
+
+
+---
+
+## OTA Update
 
 #### `npm run bundle:react-native`
 
@@ -101,31 +131,9 @@ npm run ios
 
 Uses: `npx expo prebuild`
 
----
+----
 
-#### `npm run ios`
-
-Runs the app in an iOS Simulator.
-
-```sh
-npm run ios
-```
-
-Uses: `npx expo run:ios`
-
----
-
-#### `npm run android`
-
-Connects to SKD and runs the app in an Android Simulator.
-
-```sh
-npm run android
-```
-
-Uses: `npx expo run:android`
-
----
+## Production Builds
 
 #### `npm run production:ios`
 
@@ -151,6 +159,8 @@ Uses: `npx expo run:android --variant release`
 
 ---
 
+## Code Quality
+
 #### `npm run lint`
 
 Check formatting and linting.
@@ -161,8 +171,6 @@ npm run lint
 
 Runs: `lunte`
 
----
-
 #### `npm run format`
 
 Auto-format and fix lint issues.
@@ -172,8 +180,6 @@ npm run format
 ```
 
 Runs: `prettier --write .`
-
----
 
 #### `npm test`
 
