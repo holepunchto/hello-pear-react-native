@@ -2,9 +2,9 @@
 
 > Pear Hello World for React Native on mobile with `pear-mobile` and `pear-runtime-react-native`
 
-Quick start boilerplate for embedding [pear-mobile](https://github.com/holepunchto/pear-mobile) into React-Native.
+Quick start boilerplate for embedding [pear-mobile](https://github.com/holepunchto/pear-mobile) into React-Native apps.
 
-Using [Expo v54](https://docs.expo.dev/versions/latest)
+Built with [Expo SDK v55](https://docs.expo.dev/versions/latest)
 
 ## MVP - EXPERIMENTAL
 
@@ -13,20 +13,20 @@ This boilerplate is MVP and Experimental.
 ## Requirements
 
 - `npm`
-- `node --version` >= 20.19.x
+- `node --version` >= 20.19.4
 
 [more info](https://docs.expo.dev/versions/latest/#each-expo-sdk-version-depends-on-a-react-native-version)
 
 #### For iOS Simulator
 
-- `xcodebuild --version` >= 16.1
+- `xcodebuild -version` >= 26.2
 - iOS version >= 15.1
 
 [more info](https://docs.expo.dev/versions/latest/#support-for-android-and-ios-versions)
 
 #### For Android Simulator
 
-- Android version >= 7
+- Android version >= 10 (due to react-native-bare-kit)
 
 [more info](https://docs.expo.dev/versions/latest/#support-for-android-and-ios-versions)
 
