@@ -2,10 +2,10 @@
   "name": "hello-pear-react-native",
   "productName": "HelloPear",
   "version": "1.0.1",
-  "upgrade": "pear://qax696wuam4rc3out5fw3rfp67kzihgep8ypx1j94fxsp6nrjpto",
+  "upgrade": "pear://3tbpniagqgfemumtcryenxrn6tkbft1npx3zqms47famb7441h3o",
   "main": "index.ts",
   "scripts": {
-    "bundle:bare": "npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./pearend/worker.js",
+    "bundle:bare": "npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./workers/index.js",
     "bundle:react-native": "npx react-native bundle --platform ios --dev false --entry-file index.ts --bundle-output ota/ios/HelloPear/app.bundle --assets-dest ota/ios/HelloPear && npx react-native bundle --platform android --dev false --entry-file index.ts --bundle-output ota/android/HelloPear/app.bundle --assets-dest ota/android/HelloPear",
     "build": "npx pear-build --ios-arm64 ./ota/ios/HelloPear --ios-arm64-simulator ./ota/ios/HelloPear --ios-x64-simulator ./ota/ios/HelloPear --android-arm64 ./ota/android/HelloPear --package ./package.json --target dist",
     "update": "npm run bundle:bare && npm run bundle:react-native && npm run build",
@@ -30,17 +30,21 @@
   "homepage": "https://github.com/holepunchto/hello-pear-react-native",
   "dependencies": {
     "b4a": "^1.8.0",
+    "bare-path": "^3.0.0",
     "bare-rpc": "^1.1.0",
+    "bare-storage": "^1.1.0",
+    "corestore": "^7.9.2",
     "expo": "^55.0.8",
     "expo-build-properties": "~55.0.10",
     "expo-status-bar": "~55.0.4",
     "expo-system-ui": "~55.0.10",
     "graceful-goodbye": "^1.3.3",
-    "pear-mobile": "^4.0.0",
+    "hyperswarm": "^4.17.0",
+    "pear-mobile": "^4.2.0",
     "pear-runtime-react-native": "^2.0.1",
     "react": "19.2.0",
     "react-native": "0.83.2",
-    "react-native-bare-kit": "^0.12.0"
+    "react-native-bare-kit": "^0.12.3"
   },
   "devDependencies": {
     "@react-native/metro-config": "^0.84.0",

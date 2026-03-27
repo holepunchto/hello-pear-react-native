@@ -49,7 +49,7 @@ npm install
 npm run bundle:bare
 ```
 
-Uses: `npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./pearend/worker.js`
+Uses: `npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./workers/index.js`
 
 **What it does:** Packages the Pear worker for BareKit runtime using `bare-pack`:
 

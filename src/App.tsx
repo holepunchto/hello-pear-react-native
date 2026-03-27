@@ -1,9 +1,9 @@
 /* global __DEV__ */
 
-import { useState, useEffect, use } from 'react'
+import { useState, useEffect } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View } from 'react-native'
-import PearRuntime from 'pear-runtime-react-native'
+import PearRuntime from 'pear-mobile'
 
 import RPC from 'bare-rpc'
 import b4a from 'b4a'
@@ -14,8 +14,7 @@ export default function App() {
   const [currentVersion, setCurrentVersion] = useState('')
 
   useEffect(() => {
-    const pear = new PearRuntime()
-    const IPC = pear.run('/worker.bundle', bundle, [__DEV__.toString()])
+    const IPC = PearRuntime.run('/worker.bundle', bundle, [__DEV__.toString()])
 
     new RPC(IPC, (req) => {
       if (req.command === 0) {
