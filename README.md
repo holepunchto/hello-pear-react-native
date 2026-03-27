@@ -201,7 +201,7 @@ When an update occurs, the instance will emit two events `updating` and `updated
 **pear-mobile is used only in the Bare worklet** (e.g. `pearend/worker.js`). The view layer (e.g. `App.tsx`) only starts that worklet as a bundle via `pear.run()` using `pear-runtime-react-native`. In the worklet, create the runtime with `version` and `upgrade`, listen for events, and call `applyUpdate()` on `updated` so the new bundle is used on next launch:
 
 ```js
-const pear = new PearRuntime({ version, upgrade, app })
+const pear = new PearRuntime({ version, upgrade, name })
 pear.updater.on('updated', () => {
   pear.updater.applyUpdate()
 })
@@ -225,7 +225,7 @@ In this example we dynamically disable updates when we run in a developer envior
 /* ./src/App.tsx */
 
 // passing react-native's global __DEV__ boolean to the bare worklet
-const IPC = pear.run('/worker.bundle', bundle, [__DEV__.toString()])
+const IPC = PearRuntime.run('/worker.bundle', bundle, [__DEV__.toString()])
 
 /* ./pearend/worker.js */
 
@@ -241,14 +241,13 @@ Storage is provided by **pear-mobile in the Bare worklet**. The `PearRuntime` in
 
 ## Workers
 
-Application peer-to-peer logic runs in a worker that acts as a local backend for the view layer. The worker is bundled with Bare and started via the runtime in react-native View using `pear-runtime-react-native`.
+Application peer-to-peer logic runs in a worker that acts as a local backend for the view layer. The worker is bundled with Bare and started via the runtime in react-native View using `pear-mobile`.
 
-**View layer** (e.g. `src/App.tsx`): the runtime is used only to start the worklet. No `dir` or storage is passed; the worklet gets storage from pear-mobile.
+**View layer** (e.g. `src/App.tsx`): the runtime is used only to start the worklet. Instanciation only takes place inside the worklet; the worklet gets storage from pear-mobile.
 
 ```js
-const PearRuntime = require('pear-runtime-react-native')
-const pear = new PearRuntime()
-const IPC = pear.run('/worker.bundle', bundle)
+const PearRuntime = require('pear-mobile')
+const IPC = PearRuntime.run('/worker.bundle', bundle)
 IPC.on('data', (data) => {
   console.log('data from worker', data)
 })
