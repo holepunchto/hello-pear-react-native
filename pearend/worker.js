@@ -19,12 +19,6 @@ const rpc = new RPC(IPC, (req) => {
 const req = rpc.request(1)
 req.send('Hello from Worklet!👋🍐')
 
-goodbye(async () => {
-  await swarm.destroy()
-  await pear.close()
-  await store.close()
-})
-
 main()
 async function main() {
   const store = new Corestore(path.join(dir.persistent(), 'pear-runtime/corestore'))
@@ -32,6 +26,11 @@ async function main() {
   const swarm = new Hyperswarm({ keyPair })
 
   const pear = new PearRuntime({ version, upgrade, name: appName, updates, swarm, store })
+  goodbye(async () => {
+    await swarm.destroy()
+    await pear.close()
+    await store.close()
+  })
 
   pear.updater.on('error', (err) => console.error(err))
   pear.updater.on('updated', async () => {
