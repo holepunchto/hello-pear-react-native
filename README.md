@@ -2,9 +2,9 @@
 
 > Pear Hello World for React Native on mobile with `pear-mobile` and `pear-runtime-react-native`
 
-Quick start boilerplate for embedding [pear-mobile](https://github.com/holepunchto/pear-mobile) into React-Native.
+Quick start boilerplate for embedding [pear-mobile](https://github.com/holepunchto/pear-mobile) into React-Native apps.
 
-Using [Expo v54](https://docs.expo.dev/versions/latest)
+Built with [Expo SDK v55](https://docs.expo.dev/versions/latest)
 
 ## MVP - EXPERIMENTAL
 
@@ -13,37 +13,37 @@ This boilerplate is MVP and Experimental.
 ## Requirements
 
 - `npm`
-- `node --version` >= 20.19.x
+- `node --version` >= 20.19.4
 
 [more info](https://docs.expo.dev/versions/latest/#each-expo-sdk-version-depends-on-a-react-native-version)
 
 #### For iOS Simulator
 
-- `xcodebuild --version` >= 16.1
+- `xcodebuild -version` >= 26.2
 - iOS version >= 15.1
 
 [more info](https://docs.expo.dev/versions/latest/#support-for-android-and-ios-versions)
 
 #### For Android Simulator
 
-- Android version >= 7
+- Android version >= 10 (due to react-native-bare-kit)
 
 [more info](https://docs.expo.dev/versions/latest/#support-for-android-and-ios-versions)
 
-## Install
+## Installation
 
 ```sh
 npm install
 ```
 
-## Scripts
+---
 
-#### `npm run bundle:bare`
+## Build Scripts
 
-Create the pearend bundle used to start the BareKit Worklet
+### Pre-build: Create Bare Worklet Bundle
 
 > [!CAUTION]  
-> Required prebuild step.
+> This step is required before running the app in any environment.
 
 ```sh
 npm run bundle:bare
@@ -51,7 +51,38 @@ npm run bundle:bare
 
 Uses: `npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./pearend/worker.js`
 
+**What it does:** Packages the Pear worker for BareKit runtime using `bare-pack`:
+
+- Targets: iOS arm64, iOS arm64 simulator, iOS x64 simulator, Android arm64
+- Output: `./src/worker.bundle.js`
+
 ---
+
+#### `npm run ios`
+
+Runs the app in an iOS Simulator.
+
+```sh
+npm run ios
+```
+
+Uses: `npx expo run:ios`
+
+---
+
+#### `npm run android`
+
+Run the app in an Android Simulator.
+
+```sh
+npm run android
+```
+
+Uses: `npx expo run:android`
+
+---
+
+## OTA Update
 
 #### `npm run bundle:react-native`
 
@@ -103,29 +134,7 @@ Uses: `npx expo prebuild`
 
 ---
 
-#### `npm run ios`
-
-Runs the app in an iOS Simulator.
-
-```sh
-npm run ios
-```
-
-Uses: `npx expo run:ios`
-
----
-
-#### `npm run android`
-
-Connects to SKD and runs the app in an Android Simulator.
-
-```sh
-npm run android
-```
-
-Uses: `npx expo run:android`
-
----
+## Production Builds
 
 #### `npm run production:ios`
 
@@ -151,6 +160,8 @@ Uses: `npx expo run:android --variant release`
 
 ---
 
+## Code Quality
+
 #### `npm run lint`
 
 Check formatting and linting.
@@ -161,8 +172,6 @@ npm run lint
 
 Runs: `lunte`
 
----
-
 #### `npm run format`
 
 Auto-format and fix lint issues.
@@ -172,8 +181,6 @@ npm run format
 ```
 
 Runs: `prettier --write .`
-
----
 
 #### `npm test`
 
