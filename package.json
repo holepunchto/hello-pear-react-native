@@ -5,7 +5,7 @@
   "upgrade": "pear://qax696wuam4rc3out5fw3rfp67kzihgep8ypx1j94fxsp6nrjpto",
   "main": "index.ts",
   "scripts": {
-    "bundle:bare": "npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./pearend/worker.js",
+    "bundle:bare": "npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./workers/main.js",
     "bundle:react-native": "npx react-native bundle --platform ios --dev false --entry-file index.ts --bundle-output ota/ios/HelloPear/app.bundle --assets-dest ota/ios/HelloPear && npx react-native bundle --platform android --dev false --entry-file index.ts --bundle-output ota/android/HelloPear/app.bundle --assets-dest ota/android/HelloPear",
     "build": "npx pear-build --ios-arm64 ./ota/ios/HelloPear --ios-arm64-simulator ./ota/ios/HelloPear --ios-x64-simulator ./ota/ios/HelloPear --android-arm64 ./ota/android/HelloPear --package ./package.json --target dist",
     "update": "npm run bundle:bare && npm run bundle:react-native && npm run build",
