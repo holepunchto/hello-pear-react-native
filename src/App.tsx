@@ -1,8 +1,9 @@
 /* global __DEV__ */
 
 import { useState, useEffect } from 'react'
+import { LinearGradient } from 'expo-linear-gradient'
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import PearRuntime from 'pear-mobile'
 
 import FramedStream from 'framed-stream'
@@ -13,13 +14,11 @@ import { version, upgrade, name, productName } from '../package.json'
 const appName = productName ?? name
 
 export default function App() {
-  const [message, setMessage] = useState('')
   const [status, setStatus] = useState('')
+  const [error, setError] = useState('')
+  const [applyUpdate, setApplyUpdate] = useState<(() => void) | null>(null)
 
   useEffect(() => {
-    // since there is no file system in mobile apps like on desktop, argv[0] and argv[1],
-    // which on desktop are the path to the parent execuatable and the child entry,
-    // will be empty in oder to align with our hybrid worker
     const IPC = PearRuntime.run('/worker.bundle', bundle, [
       (!__DEV__).toString(),
       version,
@@ -27,6 +26,8 @@ export default function App() {
       appName
     ])
     const pipe = new FramedStream(IPC)
+
+    setApplyUpdate(() => () => pipe.write('pear:applyUpdate'))
 
     pipe.on('data', (data) => {
       const parsed = b4a.toString(data)
@@ -38,45 +39,100 @@ export default function App() {
 
       if (parsed === 'updated') {
         setStatus('updated')
-        pipe.write('pear:applyUpdate')
         return
       }
 
       if (parsed === 'pear:updateApplied') {
-        setStatus('update-applied')
+        setStatus('')
         return
       }
-
-      setMessage(parsed)
     })
 
     pipe.on('error', (err) => console.error(err))
 
-    return () => pipe.destroy()
+    return () => {
+      pipe.destroy()
+    }
   }, [])
 
+  const title =
+    status === 'updating'
+      ? 'UPDATING...'
+      : status === 'updated' || status === 'applying'
+        ? 'Update ready!'
+        : status === 'failed'
+          ? error
+          : `v${version}`
+
   return (
-    <View style={styles.container}>
-      <Text>
-        {status === 'updating'
-          ? 'Getting new update...'
-          : status === 'updated'
-            ? 'Update downloaded, applying...'
-            : status === 'update-applied'
-              ? 'Update applied! (restart to update)'
-              : 'No updates yet'}
-      </Text>
-      <Text>{message}</Text>
-      <StatusBar style='auto' />
-    </View>
+    <LinearGradient
+      colors={['#21c437', '#0e4f15']}
+      end={{ x: 1, y: 1 }}
+      start={{ x: 0, y: 0 }}
+      style={styles.container}
+    >
+      <View style={styles.content}>
+        <Text style={styles.title}>{title}</Text>
+        {(status === 'updated' || status === 'applying') && (
+          <Pressable
+            disabled={status === 'applying' || !applyUpdate}
+            onPress={() => {
+              setStatus('applying')
+              try {
+                applyUpdate?.()
+              } catch (err) {
+                setError(`Update failed: ${err instanceof Error ? err.message : String(err)}`)
+                setStatus('failed')
+              }
+            }}
+            style={({ pressed }) => [
+              styles.updateButton,
+              (pressed || status === 'applying') && styles.updateButtonActive
+            ]}
+          >
+            <Text style={styles.updateButtonText}>
+              {status === 'applying' ? 'Updating...' : 'Apply update'}
+            </Text>
+          </Pressable>
+        )}
+      </View>
+      <StatusBar style='light' />
+    </LinearGradient>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  content: {
+    alignItems: 'center'
+  },
+  title: {
+    color: '#fff',
+    fontSize: 48,
+    fontWeight: '700',
+    textAlign: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 4
+  },
+  updateButton: {
+    marginTop: 20,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderWidth: 2,
+    borderColor: '#fff',
+    borderRadius: 8,
+    backgroundColor: '#008000'
+  },
+  updateButtonActive: {
+    backgroundColor: '#adff2f'
+  },
+  updateButtonText: {
+    color: '#fff',
+    fontSize: 18
   }
 })

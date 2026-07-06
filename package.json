@@ -1,13 +1,13 @@
 {
   "name": "hello-pear-react-native",
   "productName": "HelloPear",
-  "version": "0.1.0",
-  "upgrade": "pear://<YOUR_KEY_HERE>",
+  "version": "0.2.0",
+  "upgrade": "pear://q4a79gn1i9sj6i4y4nzxqijpxgm3781p4di3woickq8q71chbzso",
   "main": "index.ts",
   "scripts": {
     "bundle:bare": "npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./workers/main.js",
-    "bundle:react-native": "npx react-native bundle --platform ios --dev false --entry-file index.ts --bundle-output ota/ios/HelloPear/app.bundle --assets-dest ota/ios/HelloPear && npx react-native bundle --platform android --dev false --entry-file index.ts --bundle-output ota/android/HelloPear/app.bundle --assets-dest ota/android/HelloPear",
-    "build": "npx pear-build --ios-arm64 ./ota/ios/HelloPear --ios-arm64-simulator ./ota/ios/HelloPear --ios-x64-simulator ./ota/ios/HelloPear --android-arm64 ./ota/android/HelloPear --package ./package.json --target dist",
+    "bundle:react-native": "npx react-native bundle --platform ios --dev false --entry-file index.ts --bundle-output out/ios/HelloPear/app.bundle --assets-dest out/ios/HelloPear && npx react-native bundle --platform android --dev false --entry-file index.ts --bundle-output out/android/HelloPear/app.bundle --assets-dest out/android/HelloPear",
+    "build": "npx pear-build --ios-arm64 ./out/ios/HelloPear --ios-arm64-simulator ./out/ios/HelloPear --ios-x64-simulator ./out/ios/HelloPear --android-arm64 ./out/android/HelloPear --package ./package.json --target dist",
     "update": "npm run bundle:bare && npm run bundle:react-native && npm run build",
     "prebuild": "npx expo prebuild",
     "ios": "expo run:ios",
@@ -32,6 +32,7 @@
     "b4a": "^1.8.0",
     "expo": "^55.0.8",
     "expo-build-properties": "~55.0.10",
+    "expo-linear-gradient": "~55.0.15",
     "expo-status-bar": "~55.0.4",
     "expo-system-ui": "~55.0.10",
     "framed-stream": "^1.0.1",
@@ -43,6 +44,7 @@
     "react-native-bare-kit": "^0.12.0"
   },
   "devDependencies": {
+    "@react-native-community/cli": "^20.1.3",
     "@react-native/metro-config": "^0.84.0",
     "@types/react": "~19.2.10",
     "bare-pack": "^2.0.0",
