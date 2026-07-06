@@ -17,7 +17,7 @@ export default function App() {
   const [status, setStatus] = useState('')
 
   useEffect(() => {
-    // since there is no file system in mobile apps like on desktop, argv[0] and argv[1], 
+    // since there is no file system in mobile apps like on desktop, argv[0] and argv[1],
     // which on desktop are the path to the parent execuatable and the child entry,
     // will be empty in oder to align with our hybrid worker
     const IPC = PearRuntime.run('/worker.bundle', bundle, [
