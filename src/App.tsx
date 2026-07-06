@@ -1,7 +1,8 @@
 /* global __DEV__ */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
+import { reloadAppAsync } from 'expo-modules-core'
 import { StatusBar } from 'expo-status-bar'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import PearRuntime from 'pear-mobile'
@@ -17,6 +18,7 @@ export default function App() {
   const [status, setStatus] = useState('')
   const [error, setError] = useState('')
   const [applyUpdate, setApplyUpdate] = useState<(() => void) | null>(null)
+  const shouldReload = useRef(false)
 
   useEffect(() => {
     const IPC = PearRuntime.run('/worker.bundle', bundle, [
@@ -43,6 +45,14 @@ export default function App() {
       }
 
       if (parsed === 'pear:updateApplied') {
+        if (shouldReload.current) {
+          reloadAppAsync('Pear update applied').catch((err) => {
+            setError(`Reload failed: ${err instanceof Error ? err.message : String(err)}`)
+            setStatus('failed')
+          })
+          return
+        }
+
         setStatus('')
         return
       }
@@ -79,8 +89,10 @@ export default function App() {
             onPress={() => {
               setStatus('applying')
               try {
+                shouldReload.current = true
                 applyUpdate?.()
               } catch (err) {
+                shouldReload.current = false
                 setError(`Update failed: ${err instanceof Error ? err.message : String(err)}`)
                 setStatus('failed')
               }

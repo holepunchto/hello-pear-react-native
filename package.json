@@ -1,8 +1,8 @@
 {
   "name": "hello-pear-react-native",
   "productName": "HelloPear",
-  "version": "0.2.0",
-  "upgrade": "pear://q4a79gn1i9sj6i4y4nzxqijpxgm3781p4di3woickq8q71chbzso",
+  "version": "0.1.0",
+  "upgrade": "pear://<YOUR_KEY_HERE>",
   "main": "index.ts",
   "scripts": {
     "bundle:bare": "npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./workers/main.js",
@@ -33,6 +33,7 @@
     "expo": "^55.0.8",
     "expo-build-properties": "~55.0.10",
     "expo-linear-gradient": "~55.0.15",
+    "expo-modules-core": "^55.0.17",
     "expo-status-bar": "~55.0.4",
     "expo-system-ui": "~55.0.10",
     "framed-stream": "^1.0.1",
