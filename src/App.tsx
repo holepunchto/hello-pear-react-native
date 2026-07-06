@@ -1,42 +1,70 @@
 /* global __DEV__ */
 
-import { useState, useEffect, use } from 'react'
+import { useState, useEffect } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View } from 'react-native'
-import PearRuntime from 'pear-runtime-react-native'
+import PearRuntime from 'pear-mobile'
 
-import RPC from 'bare-rpc'
+import FramedStream from 'framed-stream'
 import b4a from 'b4a'
 import bundle from './worker.bundle.js'
+import { version, upgrade, name, productName } from '../package.json'
+
+const appName = productName ?? name
 
 export default function App() {
   const [message, setMessage] = useState('')
-  const [currentVersion, setCurrentVersion] = useState('')
+  const [status, setStatus] = useState('')
 
   useEffect(() => {
-    const pear = new PearRuntime()
-    const IPC = pear.run('/worker.bundle', bundle, [__DEV__.toString()])
+    // since there is no file system in mobile apps like on desktop, argv[0] and argv[1], 
+    // which on desktop are the path to the parent execuatable and the child entry,
+    // will be empty in oder to align with our hybrid worker
+    const IPC = PearRuntime.run('/worker.bundle', bundle, [
+      (!__DEV__).toString(),
+      version,
+      upgrade,
+      appName
+    ])
+    const pipe = new FramedStream(IPC)
 
-    new RPC(IPC, (req) => {
-      if (req.command === 0) {
-        const parsed = b4a.toString(req.data)
-        setCurrentVersion(parsed)
+    pipe.on('data', (data) => {
+      const parsed = b4a.toString(data)
+
+      if (parsed === 'updating') {
+        setStatus('updating')
+        return
       }
-      if (req.command === 1) {
-        const parsed = b4a.toString(req.data)
-        setMessage(parsed)
+
+      if (parsed === 'updated') {
+        setStatus('updated')
+        pipe.write('pear:applyUpdate')
+        return
       }
+
+      if (parsed === 'pear:updateApplied') {
+        setStatus('update-applied')
+        return
+      }
+
+      setMessage(parsed)
     })
+
+    pipe.on('error', (err) => console.error(err))
+
+    return () => pipe.destroy()
   }, [])
 
   return (
     <View style={styles.container}>
       <Text>
-        {currentVersion === ''
-          ? 'Checking version...'
-          : currentVersion === 'update'
-            ? 'Update Available! (restart to update)'
-            : `Version ${currentVersion}`}
+        {status === 'updating'
+          ? 'Getting new update...'
+          : status === 'updated'
+            ? 'Update downloaded, applying...'
+            : status === 'update-applied'
+              ? 'Update applied! (restart to update)'
+              : 'No updates yet'}
       </Text>
       <Text>{message}</Text>
       <StatusBar style='auto' />
