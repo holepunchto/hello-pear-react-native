@@ -7,8 +7,8 @@ node_modules/
 src/worker.bundle.js
 
 # distribution
+out/
 dist/
-ota/
 
 # Expo
 .expo/

@@ -49,7 +49,7 @@ npm install
 npm run bundle:bare
 ```
 
-Uses: `npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./pearend/worker.js`
+Uses: `npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./workers/main.js`
 
 **What it does:** Packages the Pear worker for BareKit runtime using `bare-pack`:
 
@@ -198,7 +198,7 @@ An update occurs when a seeded application drive is written to.
 
 When an update occurs, the instance will emit two events `updating` and `updated`.
 
-**pear-mobile is used only in the Bare worklet** (e.g. `pearend/worker.js`). The view layer (e.g. `App.tsx`) only starts that worklet as a bundle via `pear.run()` using `pear-runtime-react-native`. In the worklet, create the runtime with `version` and `upgrade`, listen for events, and call `applyUpdate()` on `updated` so the new bundle is used on next launch:
+**pear-mobile is used only in the Bare worklet** (e.g. `workers/main.js`). The view layer (e.g. `App.tsx`) only starts that worklet as a bundle via `pear.run()` using `pear-runtime-react-native`. In the worklet, create the runtime with `version` and `upgrade`, listen for events, and call `applyUpdate()` on `updated` so the new bundle is used on next launch:
 
 ```js
 const pear = new PearRuntime({ version, upgrade, app })
@@ -227,7 +227,7 @@ In this example we dynamically disable updates when we run in a developer envior
 // passing react-native's global __DEV__ boolean to the bare worklet
 const IPC = pear.run('/worker.bundle', bundle, [__DEV__.toString()])
 
-/* ./pearend/worker.js */
+/* ./workers/main.js */
 
 // checking the value and passing boolean to PearRuntime as updates
 const isDev = Bare.argv.pop()
@@ -312,7 +312,7 @@ npm version <v>
 
 - Ensure `package.json` `author`, `license`, `description`, `name` are set as needed for distribution.
 - Bump version and ensure `upgrade` is set (see above).
-- Build the pearend worker bundle, the app bundles and move them to the dist folder:
+- Build the worker bundle, the app bundles and move them to the dist folder:
 
 ```sh
 npm run update

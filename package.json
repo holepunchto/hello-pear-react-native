@@ -1,13 +1,13 @@
 {
   "name": "hello-pear-react-native",
   "productName": "HelloPear",
-  "version": "1.0.1",
-  "upgrade": "pear://qax696wuam4rc3out5fw3rfp67kzihgep8ypx1j94fxsp6nrjpto",
+  "version": "1.0.0",
+  "upgrade": "pear://<YOUR_KEY_HERE>",
   "main": "index.ts",
   "scripts": {
-    "bundle:bare": "npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./pearend/worker.js",
-    "bundle:react-native": "npx react-native bundle --platform ios --dev false --entry-file index.ts --bundle-output ota/ios/HelloPear/app.bundle --assets-dest ota/ios/HelloPear && npx react-native bundle --platform android --dev false --entry-file index.ts --bundle-output ota/android/HelloPear/app.bundle --assets-dest ota/android/HelloPear",
-    "build": "npx pear-build --ios-arm64 ./ota/ios/HelloPear --ios-arm64-simulator ./ota/ios/HelloPear --ios-x64-simulator ./ota/ios/HelloPear --android-arm64 ./ota/android/HelloPear --package ./package.json --target dist",
+    "bundle:bare": "npx bare-pack --host ios-arm64 --host ios-arm64-simulator --host ios-x64-simulator --host android-arm64 --linked --out ./src/worker.bundle.js ./workers/main.js",
+    "bundle:react-native": "npx react-native bundle --platform ios --dev false --entry-file index.ts --bundle-output out/ios/HelloPear/app.bundle --assets-dest out/ios/HelloPear && npx react-native bundle --platform android --dev false --entry-file index.ts --bundle-output out/android/HelloPear/app.bundle --assets-dest out/android/HelloPear",
+    "build": "npx pear-build --ios-arm64 ./out/ios/HelloPear --ios-arm64-simulator ./out/ios/HelloPear --ios-x64-simulator ./out/ios/HelloPear --android-arm64 ./out/android/HelloPear --package ./package.json --target dist",
     "update": "npm run bundle:bare && npm run bundle:react-native && npm run build",
     "prebuild": "npx expo prebuild",
     "ios": "expo run:ios",
@@ -30,12 +30,14 @@
   "homepage": "https://github.com/holepunchto/hello-pear-react-native",
   "dependencies": {
     "b4a": "^1.8.0",
-    "bare-rpc": "^1.1.0",
     "expo": "^55.0.8",
     "expo-build-properties": "~55.0.10",
+    "expo-linear-gradient": "~55.0.15",
+    "expo-modules-core": "^55.0.17",
     "expo-status-bar": "~55.0.4",
     "expo-system-ui": "~55.0.10",
-    "graceful-goodbye": "^1.3.3",
+    "framed-stream": "^1.0.1",
+    "hello-pear-worker": "^1.0.0",
     "pear-mobile": "^4.0.0",
     "pear-runtime-react-native": "^2.0.1",
     "react": "19.2.0",
@@ -43,6 +45,7 @@
     "react-native-bare-kit": "^0.12.0"
   },
   "devDependencies": {
+    "@react-native-community/cli": "^20.1.3",
     "@react-native/metro-config": "^0.84.0",
     "@types/react": "~19.2.10",
     "bare-pack": "^2.0.0",
