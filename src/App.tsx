@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import { reloadAppAsync } from 'expo-modules-core'
 import { StatusBar } from 'expo-status-bar'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import PearRuntime from 'pear-mobile'
 
 import FramedStream from 'framed-stream'
@@ -44,6 +44,18 @@ export default function App() {
         return
       }
 
+      if (parsed === 'minver-required') {
+        setStatus('incompatible')
+        return
+      }
+
+      if (parsed.startsWith('pear:updateFailed')) {
+        shouldReload.current = false
+        setError(parsed.slice('pear:updateFailed '.length) || 'Update failed')
+        setStatus('failed')
+        return
+      }
+
       if (parsed === 'pear:updateApplied') {
         if (shouldReload.current) {
           reloadAppAsync('Pear update applied').catch((err) => {
@@ -70,9 +82,11 @@ export default function App() {
       ? 'UPDATING...'
       : status === 'updated' || status === 'applying'
         ? 'Update ready!'
-        : status === 'failed'
-          ? error
-          : `v${version}`
+        : status === 'incompatible'
+          ? `Update available on the ${Platform.OS === 'ios' ? 'App Store' : 'Play Store'}`
+          : status === 'failed'
+            ? error
+            : `v${version}`
 
   return (
     <LinearGradient
