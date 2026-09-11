@@ -35,7 +35,7 @@ npm run production:ios       # expo run:ios --configuration Release
 npm run production:android   # expo run:android --variant release
 npm run prebuild             # expo prebuild — regenerates ios/ and android/
 npm run bundle:react-native  # RN bundles → out/<platform>/HelloPear/
-npm run build                # pear-build → dist/ (+ copies pear.json)
+npm run build                # pear-build → dist/ (includes pear.json)
 npm run update               # bundle:bare && bundle:react-native && build
 npm run lint                 # lunte
 npm run format               # prettier . --write
@@ -100,10 +100,11 @@ tarballs or replacing the specs.
   `out/<platform>/HelloPear` output dirs in `bundle:react-native` ↔ the directory
   basename passed to each `pear-build --<host>` flag ↔ `by-arch/<host>/app/<name>/` in
   the Deployment Directory ↔ the `name` argv the updater uses to find its payload.
-  `pear-build@0.1.2` validates none of this — it mirrors whatever basename it is given,
-  so a partial rename produces a drive the updater silently never matches
-- `npm run build` must keep its `cp -f pear.json dist/pear.json` tail: `pear-build`
-  copies `package.json` and the per-host app dirs, and nothing else
+  `pear-build` validates app basenames against the package identity; the worker's
+  name must still match the deployed directory
+- `npm run build` passes `--config ./pear.json`: `pear-build` requires this config for
+  mobile projects and copies it verbatim to `dist/pear.json` alongside `package.json`
+  and the per-host app directories
 - The Expo config plugin ↔ the generated `ios/` and `android/` folders, which are
   **gitignored**. The plugin patches native boot code during prebuild and is idempotent
   via a version marker, so native OTA behavior can only change by regenerating them

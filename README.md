@@ -358,10 +358,10 @@ dist/
     android-arm64/app/HelloPear/app.bundle
 ```
 
-`pear-build` does not copy `pear.json` — the `build` script appends `cp -f pear.json dist/pear.json`, and without it the payload carries no `minver`. It is copied verbatim, so a [multisig config][pear-multisig-config] ships inside every payload alongside `minver`; editing the `multisig` block derives a different production key, editing `minver` does not.
+The `build` script passes `--config ./pear.json` to `pear-build`, which copies it verbatim to `dist/pear.json` alongside `package.json`. This includes `updates.minver` and any [multisig config][pear-multisig-config]; editing the `multisig` block derives a different production key, editing `minver` does not.
 
 > [!IMPORTANT]
-> The `HelloPear` leaf is `package.json` `productName`, and it must match in three places: the `out/<platform>/HelloPear` paths in `bundle:react-native`, the directory basename passed to each `pear-build --<host>` flag, and the name the app passes into the worker. The updater looks for exactly `/by-arch/<host>/app/<productName>`. A partial rename produces a drive that stages and replicates perfectly and that the updater silently never matches.
+> The `HelloPear` leaf is `package.json` `productName`, and it must match in three places: the `out/<platform>/HelloPear` paths in `bundle:react-native`, the directory basename passed to each `pear-build --<host>` flag, and the name the app passes into the worker. `pear-build` validates the app basename against the package identity, but the worker's name must still match: the updater looks for exactly `/by-arch/<host>/app/<productName>`.
 
 `dist/` is then a Deployment Directory in the standard `package.json` + `by-arch/<host>/app` shape:
 
@@ -405,7 +405,7 @@ Signed native builds are not configured here; [hello-pear-electron: CI Configura
 - `npm run prebuild` - `npx expo prebuild`; regenerates `ios/` and `android/` and applies the config plugin
 - `npm run bundle:bare` - pack the Bare worker into `src/worker.bundle.js` with [bare-pack][bare-pack]
 - `npm run bundle:react-native` - write the iOS and Android JavaScript bundles to `out/`
-- `npm run build` - assemble `dist/` with [pear-build][pear-build], then copy `pear.json` into it
+- `npm run build` - assemble `dist/` with [pear-build][pear-build], including `package.json`, `pear.json`, and the per-host OTA payloads
 - `npm run update` - `bundle:bare`, `bundle:react-native` and `build` in sequence
 - `npm run lint` - `lunte`; does not check formatting
 - `npm run format` - `prettier . --write`; does not fix lint issues
