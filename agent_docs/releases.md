@@ -23,15 +23,16 @@ the rules for keeping them ordered are in [README](../README.md#version-manageme
   assets. React Native bundles are architecture-agnostic within a platform, which is why
   `npm run build` passes the same `out/ios/HelloPear` directory to `--ios-arm64`,
   `--ios-arm64-simulator` and `--ios-x64-simulator`.
-- `pear-build@0.1.2` does less than the name suggests: for each `--<host>` flag it
+- `pear-build` copies each app directory selected by a `--<host>` flag: it
   mirrors `dirname(<path>)` with prefix `/<basename(<path>)>` into
   `<target>/by-arch/<host>/app/`, and copies `--package` to `<target>/package.json`.
-  That is all. It **does not copy `pear.json`** — hence the `cp -f pear.json
-dist/pear.json` tail on `npm run build` — and it **does not validate** the basename
-  against `productName`. The basename becomes the directory the updater looks for
-  (`/by-arch/<host>/app/<name>`, where `name` is the `productName` argv the app passed
-  into the worker), so a rename that misses either side produces a drive that stages,
-  seeds and replicates perfectly and never matches.
+  `--config ./pear.json` is required for mobile projects with `react-native-bare-kit`
+  in their dependencies; the config is parsed and copied verbatim to
+  `<target>/pear.json`. No separate copy command is needed.
+  App basenames, with extensions removed, must match `productName` (falling back to
+  `name`) or an object-form `package.json` `bin` key; otherwise the build throws
+  `ERR_INVALID_APP_NAME`. The worker's name must still match the deployed directory
+  (`/by-arch/<host>/app/<name>`).
 - The Deployment Directory here is `dist/`, inside the project. It cannot nest inside
   itself — `pear-build` mirrors `out/<platform>/HelloPear`, never the project root — but
   `dist` is **also Expo's default `expo export --output-dir`**, which is why `.gitignore`
@@ -62,6 +63,7 @@ dist/pear.json` tail on `npm run build` — and it **does not validate** the bas
 - `.github/workflows/publish.yml` publishes to npm on any `v*` tag — the tag shape
   `npm version` creates. This package is `private: true`, so such a tag produces a
   failing release job rather than a publish. Do not tag unless that is deliberate.
-- Deployment (`pear touch` → `pear stage` → `pear provision` → `pear multisig`) is
-  documented for humans in [README](../README.md#deployments) and is never an agent's
-  call.
+- The shared deployment flow (`pear touch` → `pear stage` → `pear provision` →
+  `pear multisig`) is documented in [Pear Docs](https://docs.pears.com/how-to/operate-an-app/manual-deployment/deployment/).
+  [README](../README.md#deployments) links to it and keeps the mobile OTA payload and
+  versioning guidance. Deployment is never an agent's call.
