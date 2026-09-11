@@ -12,7 +12,7 @@ End-to-end boilerplate for embedding [pear-mobile][pear-mobile] into [React Nati
 
 Built with [Expo][expo] SDK v55.
 
-This is the mobile counterpart to [hello-pear-electron][hello-pear-electron], which documents the deployment flow both templates share. What differs on mobile:
+This is the mobile counterpart to [hello-pear-electron][hello-pear-electron]. The shared deployment flow lives in the [Pear docs][pear-deployments]. What differs on mobile:
 
 - An OTA payload is a **JavaScript bundle per host**, not a set of native distributables — see [Build the OTA payload](#payload).
 - Store releases and OTA payloads share **one SemVer sequence**, gated by `pear.json` `updates.minver` — see [Version management](#version-management).
@@ -71,7 +71,7 @@ This boilerplate is MVP and Experimental.
 
 ## Terminology <a name="terminology"></a>
 
-The deployment terms are shared with [hello-pear-electron][electron-terminology]. The mobile-specific ones:
+The shared deployment terms are defined in the [release pipeline glossary][pear-release-glossary]. The mobile-specific ones:
 
 - **OTA** - Over-the-Air. Data delivery without manual intervention
 - **OTA Updates** - Direct software updates to running applications without manual reinstallation. On mobile an OTA replaces the **JavaScript bundle only**; native code ships through the App Store and Play Store
@@ -295,13 +295,42 @@ Step 4 does not have to wait for the store release: clients below `minver` skip 
 
 ## Peer-to-Peer Deployments <a name="deployments"></a>
 
-`pear touch`, `pear seed`, `pear stage`, `pear provision` and `pear multisig` operate on a Deployment Directory and do not care what is inside it, so the whole flow — deployment layers, the release cycle, multisig setup and signing, and release-line practices — is documented once, in **[hello-pear-electron: Peer-to-Peer Deployments][electron-deployments]**:
+Use the [`pear`][pear-docs] CLI to deploy applications.
 
-- [0. Touch and Seed][electron-touch-seed] and [1. Set upgrade link][electron-set-upgrade] create the release line
-- [2. Version][electron-version] applies, under the rules in [Version management](#version-management)
-- **3 and 4 are replaced by [Build the OTA payload](#payload)** — one `npm run update` in place of [Make Distributables][electron-make] and [Build Deployment Directory][electron-build]
-- [5. Stage][electron-stage], [6. Provision][electron-provision] and [7. Multisig][electron-multisig] apply verbatim, with `dist` as the Deployment Directory
-- [Foundational Steps][electron-foundational] gives the order to bootstrap them in
+The shared release flow — stage, provision, and multisig — plus the Foundational Steps and release lines now live in the Pear docs:
+
+- [Deploy your application][pear-deployments] — the Foundational Steps, command by command
+- [Release pipeline][pear-release-pipeline] — how staging, provisioning, multisig, and release lines fit together
+
+On mobile, **steps 3 and 4 become [Build the OTA payload](#payload)**: `npm run update` bundles the JavaScript and assembles `dist/`. Follow [Version management](#version-management) for the shared native/OTA version sequence, and [Store Submissions](#store-submissions) for native binaries. The remaining deployment steps use `dist` as the Deployment Directory.
+
+The Foundational Steps bootstrap the deployment and then feed into the repeating release cycle:
+
+```mermaid
+graph TD
+    subgraph Link Setup
+        T(0. Touch & Seed) --> U(1. Set upgrade link)
+    end
+
+    U -.-> V
+
+    V(2. Version) --> Make(3. Bundle JavaScript)
+    Make --> Build(4. Build Deployment Directory)
+    Build --> Stage(5. Stage)
+    Stage -->|iterate| V
+    Stage -->|stable| Prov(6. Provision)
+    Prov -->|assessed| Req(7d. Prepare Request)
+    Req --> Sign(7e. Sign)
+    Sign --> Verify(7f. Verify)
+    Verify --> Commit(7g. Commit)
+    Commit --> Live[Production Live]
+    Live -->|next release| V
+
+    K(7a. Create Signing Keys) --> C(7b. Create Multisig Config)
+    Prov -->|setup| C
+    C --> L(7c. Set upgrade to Multisig Link)
+    L --> Req
+```
 
 ### Build the OTA payload <a name="payload"></a>
 
@@ -329,7 +358,7 @@ dist/
     android-arm64/app/HelloPear/app.bundle
 ```
 
-`pear-build` does not copy `pear.json` — the `build` script appends `cp -f pear.json dist/pear.json`, and without it the payload carries no `minver`. It is copied verbatim, so a [multisig config][electron-multisig-config] ships inside every payload alongside `minver`; editing the `multisig` block derives a different production key, editing `minver` does not.
+`pear-build` does not copy `pear.json` — the `build` script appends `cp -f pear.json dist/pear.json`, and without it the payload carries no `minver`. It is copied verbatim, so a [multisig config][pear-multisig-config] ships inside every payload alongside `minver`; editing the `multisig` block derives a different production key, editing `minver` does not.
 
 > [!IMPORTANT]
 > The `HelloPear` leaf is `package.json` `productName`, and it must match in three places: the `out/<platform>/HelloPear` paths in `bundle:react-native`, the directory basename passed to each `pear-build --<host>` flag, and the name the app passes into the worker. The updater looks for exactly `/by-arch/<host>/app/<productName>`. A partial rename produces a drive that stages and replicates perfectly and that the updater silently never matches.
@@ -342,7 +371,7 @@ pear stage pear://qxenz5wmspmryjc13m9yzsqj1conqotn8fb4ocbufwtz9mtbqq5o dist
 
 ### Release lines on mobile <a name="mobile-release-lines"></a>
 
-[Release lines][electron-release-lines] and [release line builds][electron-release-line-builds] work as on desktop, except that `upgrade` is compiled into the native build: a line is pinned to the build its users have installed, and no OTA can move them to another line.
+[Release lines][pear-release-lines] and [release line builds][pear-release-line-builds] work as on desktop, except that `upgrade` is compiled into the native build: a line is pinned to the build its users have installed, and no OTA can move them to another line.
 
 | Release line | Native build its users run     | OTA source |
 | ------------ | ------------------------------ | ---------- |
@@ -384,7 +413,7 @@ Signed native builds are not configured here; [hello-pear-electron: CI Configura
 
 ## Troubleshooting <a name="troubleshooting"></a>
 
-Deployment-side problems — lost write access, unexpected `pear stage` size increases, `INCOMPATIBLE_SOURCE_AND_TARGET` on commit, unreachable seeders — are covered in [hello-pear-electron: Troubleshooting][electron-troubleshooting].
+Deployment-side problems — lost write access, unexpected `pear stage` size increases, `INCOMPATIBLE_SOURCE_AND_TARGET` on commit, unreachable seeders — are covered in [Pear Docs: Troubleshoot desktop releases][pear-release-troubleshooting].
 
 ### The app shows its version and nothing else <a name="app-shows-version-only"></a>
 
@@ -396,7 +425,7 @@ The worklet died at boot. Check the system log — nothing surfaces in the Metro
 - Is the `upgrade` link correct, and is the drive seeded?
 - Was `npm run bundle:bare` re-run after the worker changed?
 - Is this a debug build? Debug always loads from Metro.
-- Was the app opened before the seeder came online? Peer lookups repeat roughly every 15 minutes — see [hello-pear-electron][electron-seeded-after-open].
+- Was the app opened before the seeder came online? Peer lookups repeat roughly every 15 minutes — see [Seeder came online after the client][pear-seeded-after-open].
 - On Android, was the app fully relaunched rather than reloaded? iOS re-reads the bundle URL on every reload; Android captures it when its `ReactHost` is first created.
 
 ### The app says "Update available on the App Store / Play Store" <a name="minver-required"></a>
@@ -437,23 +466,12 @@ Apache-2.0
 [expo]: https://docs.expo.dev
 [react-native]: https://reactnative.dev
 [semver]: https://semver.org
-
-<!-- hello-pear-electron Sections -->
-
-[electron-terminology]: https://github.com/holepunchto/hello-pear-electron#terminology
-[electron-deployments]: https://github.com/holepunchto/hello-pear-electron#deployments
-[electron-foundational]: https://github.com/holepunchto/hello-pear-electron#foundational-steps
-[electron-touch-seed]: https://github.com/holepunchto/hello-pear-electron#touch-and-seed
-[electron-set-upgrade]: https://github.com/holepunchto/hello-pear-electron#set-upgrade-link
-[electron-version]: https://github.com/holepunchto/hello-pear-electron#version
-[electron-make]: https://github.com/holepunchto/hello-pear-electron#make-distributables
-[electron-build]: https://github.com/holepunchto/hello-pear-electron#build-deploy-directory
-[electron-stage]: https://github.com/holepunchto/hello-pear-electron#stage
-[electron-provision]: https://github.com/holepunchto/hello-pear-electron#provision
-[electron-multisig]: https://github.com/holepunchto/hello-pear-electron#multisig
-[electron-multisig-config]: https://github.com/holepunchto/hello-pear-electron#create-multisig-config
-[electron-release-lines]: https://github.com/holepunchto/hello-pear-electron#release-lines
-[electron-release-line-builds]: https://github.com/holepunchto/hello-pear-electron#release-line-builds
+[pear-deployments]: https://docs.pears.com/how-to/operate-an-app/manual-deployment/deployment/
+[pear-release-pipeline]: https://docs.pears.com/explanation/deployment-releasing-apps-p2p/
+[pear-release-glossary]: https://docs.pears.com/explanation/deployment-releasing-apps-p2p/#glossary
+[pear-multisig-config]: https://docs.pears.com/how-to/operate-an-app/multisig/set-up-multisig/#create-the-multisig-config
+[pear-release-lines]: https://docs.pears.com/explanation/deployment-releasing-apps-p2p/#release-lines
+[pear-release-line-builds]: https://docs.pears.com/how-to/operate-an-app/manual-deployment/deployment/#release-lines-and-multiple-stage-drives
+[pear-release-troubleshooting]: https://docs.pears.com/how-to/operate-an-app/manual-deployment/troubleshoot-desktop-releases/
+[pear-seeded-after-open]: https://docs.pears.com/how-to/operate-an-app/manual-deployment/troubleshoot-desktop-releases/#seeder-came-online-after-the-client
 [electron-ci]: https://github.com/holepunchto/hello-pear-electron#ci-configuration
-[electron-seeded-after-open]: https://github.com/holepunchto/hello-pear-electron#check-seeded-after-open
-[electron-troubleshooting]: https://github.com/holepunchto/hello-pear-electron#troubleshooting

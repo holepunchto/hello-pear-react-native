@@ -62,6 +62,7 @@ dist/pear.json` tail on `npm run build` — and it **does not validate** the bas
 - `.github/workflows/publish.yml` publishes to npm on any `v*` tag — the tag shape
   `npm version` creates. This package is `private: true`, so such a tag produces a
   failing release job rather than a publish. Do not tag unless that is deliberate.
-- Deployment (`pear touch` → `pear stage` → `pear provision` → `pear multisig`) is
-  documented for humans in [README](../README.md#deployments) and is never an agent's
-  call.
+- The shared deployment flow (`pear touch` → `pear stage` → `pear provision` →
+  `pear multisig`) is documented in [Pear Docs](https://docs.pears.com/how-to/operate-an-app/manual-deployment/deployment/).
+  [README](../README.md#deployments) links to it and keeps the mobile OTA payload and
+  versioning guidance. Deployment is never an agent's call.
