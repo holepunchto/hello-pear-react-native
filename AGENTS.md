@@ -21,7 +21,9 @@ frames with it — Corestore, Hyperswarm and the updater all live inside the wor
 Applying an update writes `app.bundle` + `package.json` into
 `<persistent>/pear-runtime/ota/`; which bundle actually boots is decided by **native
 code the Expo config plugin patched into `AppDelegate.swift` and `MainApplication.kt`**,
-which compares the OTA manifest version against the installed native version at launch.
+which compares the OTA manifest version against the installed native version at launch
+and on reload. Android's reload hook lives in the generated `modules/pear-runtime-reload/`
+Expo module.
 JavaScript cannot override that choice.
 
 ## Commands

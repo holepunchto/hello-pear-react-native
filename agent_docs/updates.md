@@ -76,8 +76,9 @@ needs at least native version X."
 
 - The Expo config plugin patches `AppDelegate.swift` (`bundleURL()`) and
   `MainApplication.kt` (`jsBundleFilePath = pearOtaBundle(applicationContext)`), guarded
-  by an `OTA v3` marker so re-running prebuild is idempotent. **Debug builds always use
-  Metro** — OTA selection cannot be exercised in development at all.
+  by the shared `OTA v4` marker so re-running prebuild is idempotent.
+  **Debug builds always use Metro** — OTA selection cannot be exercised in development
+  at all.
 - Both platforms require `app.bundle` **and** `package.json` to exist in the OTA dir,
   and take the OTA only when its manifest version is strictly greater than the installed
   native version. Equal never wins, so shipping a store release at or above the last OTA
@@ -88,14 +89,12 @@ needs at least native version X."
 - Paths line up because `bare-storage`'s `persistent()` returns exactly what the native
   code reads: `NSApplicationSupportDirectory` on iOS and `/data/user/0/<pkg>/files`
   (`context.filesDir`) on Android.
-- **iOS re-reads the bundle on reload; Android does not.** iOS supplies the bundle
-  through a block that calls the delegate's `bundleURL` on every (re)load, so
-  `reloadAppAsync()` re-runs the OTA check. Android's `ExpoReactHostFactory` caches the
-  `ReactHost` in a static and captures `jsBundleFilePath` when that host is first
-  created; `reloadAppAsync()` → `reactDelegate.reload()` reuses the captured path, so a
-  freshly applied OTA only takes effect after a **full process restart**. `App.tsx`
-  reloads on both platforms — treat the Android path as needing a real relaunch and
-  verify on device before promising otherwise.
+- **Both platforms re-read the bundle on reload.** iOS calls the delegate's
+  `bundleURL` on every load. Android's generated local Expo module in
+  `modules/pear-runtime-reload` supplies a host handler that repeats the same version
+  check on every load. `reloadAppAsync()` therefore activates a freshly applied OTA
+  on both platforms without restarting the process. Changing this native behavior
+  requires prebuild and a new native binary.
 
 ## Seeding / replication
 
