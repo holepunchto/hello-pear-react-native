@@ -13,7 +13,7 @@
     "ios": "node scripts/check-upgrade.js && expo run:ios",
     "android": "node scripts/check-upgrade.js && expo run:android",
     "production:ios": "npm run ios -- --configuration Release",
-    "production:android": "npm run android --variant release",
+    "production:android": "npm run android -- --variant release",
     "lint": "lunte",
     "format": "prettier . --write",
     "test": "prettier . --check && lunte",
@@ -40,7 +40,7 @@
     "framed-stream": "^1.0.1",
     "hello-pear-worker": "^1.1.0",
     "pear-mobile": "^4.3.0",
-    "pear-runtime-react-native": "^3.0.0",
+    "pear-runtime-react-native": "^3.0.1",
     "react": "19.2.0",
     "react-native": "0.83.2",
     "react-native-bare-kit": "^0.12.0"
