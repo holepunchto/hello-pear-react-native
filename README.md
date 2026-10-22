@@ -24,6 +24,7 @@ This boilerplate is MVP and Experimental.
 
 ## Table of Contents
 
+- [Related Repositories](#related-repositories)
 - [OS Support](#os-support)
 - [Requirements](#requirements)
 - [Terminology](#terminology)
@@ -47,6 +48,10 @@ This boilerplate is MVP and Experimental.
 - [CI](#ci)
 - [Scripts](#scripts)
 - [Troubleshooting](#troubleshooting)
+
+## Related Repositories <a name="related-repositories"></a>
+
+Pear has official templates for desktop, terminal, short-lived CLI, and mobile apps. See [Start from a template][from-a-template] to compare them and pick the one that matches what you're shipping.
 
 ## OS Support <a name="os-support"></a>
 
@@ -452,6 +457,7 @@ Apache-2.0
 [bare]: https://github.com/holepunchto/bare
 [nodejs]: https://nodejs.org
 [pear-docs]: https://docs.pears.com
+[from-a-template]: https://docs.pears.com/p2p/getting-started/from-a-template/
 [hyperdrive]: https://github.com/holepunchto/hyperdrive
 [hypercore]: https://github.com/holepunchto/hypercore
 [hypercore-fork]: https://github.com/holepunchto/hypercore#corefork
