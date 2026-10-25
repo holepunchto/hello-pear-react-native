@@ -43,9 +43,15 @@ facts.
   `hello-pear-worker/index.js` into `workers/main.js`; its Node-builtin usage then needs
   an `imports` entry here, and its dependencies become this repo's dependencies.
 - `bare-pack` runs with `--linked` and four `--host` targets, so native addons resolve
-  to `linked:` specifiers that `react-native-bare-kit` has prelinked as xcframeworks /
-  `.so`s. Adding a worker dependency with a native addon that BareKit does not already
-  vendor will bundle fine and then fail to link at runtime.
+  to `linked:` specifiers that must exist as xcframeworks / `.so`s in the native app.
+  Since 0.16 `react-native-bare-kit` no longer links them itself: the `postinstall`
+  script runs `link:ios` and `link:android`, which use `bare-link` to write the addons
+  the graph of `workers/main.js` loads into `node_modules/react-native-bare-kit/ios/addons`
+  and `android/src/main/addons`, the directories its podspec and Gradle build pick up.
+  Those directories are cleared whenever the package is reinstalled, so re-run the link
+  scripts (or `npm install`) after changing the worker's dependencies. A missing addon
+  bundles fine and then aborts the app at boot with `CANNOT_LOAD … linked:lib<name>.so`
+  (Android) — the worklet's uncaught error takes down the whole process.
 - Worklets are **suspended and resumed with the app**: `react-native-bare-kit` registers
   a global `AppState` listener that calls `suspend()` on `background` and `resume()` on
   `active` for every live worklet. Backgrounded P2P work stops; do not assume the swarm

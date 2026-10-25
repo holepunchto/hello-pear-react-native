@@ -29,7 +29,8 @@ JavaScript cannot override that choice.
 ## Commands
 
 ```sh
-npm install
+npm install                  # postinstall links the worker's native addons (bare-link)
+npm run link:ios             # re-link after changing the worker's deps (also link:android)
 npm run bundle:bare          # REQUIRED before any run — builds src/worker.bundle.js
 npm run ios                  # expo run:ios
 npm run android              # expo run:android

@@ -134,6 +134,8 @@ npm run bundle:bare
 
 Packs the worker for the BareKit runtime with [bare-pack][bare-pack], targeting iOS arm64, the iOS arm64 and x64 simulators, and Android arm64. The output, `src/worker.bundle.js`, is gitignored and is imported directly by `src/App.tsx`. Rerun it after every change to `workers/main.js` or to a package the worker imports: nothing rebuilds it automatically, and a stale bundle fails silently because the app still boots and the UI still looks normal.
 
+The bundle refers to the worker's native addons as `linked:` libraries, which must be in the native app. [react-native-bare-kit][react-native-bare-kit] doesn't link them itself, so `npm install` runs `link:ios` and `link:android` (`postinstall`): [bare-link][bare-link] writes the addons that `workers/main.js` loads into `node_modules/react-native-bare-kit/ios/addons` and `node_modules/react-native-bare-kit/android/src/main/addons`, which its iOS and Android builds include. Rerun them after changing the worker's dependencies; a missing addon aborts the app at boot with `CANNOT_LOAD`.
+
 ### Run <a name="run"></a>
 
 ```sh
@@ -409,6 +411,7 @@ Signed native builds are not configured here; [hello-pear-electron: CI Configura
 - `npm run check:upgrade` - run the `upgrade` link check on its own ([pear-link][pear-link])
 - `npm run prebuild` - `npx expo prebuild`; regenerates `ios/` and `android/` and applies the config plugin
 - `npm run bundle:bare` - pack the Bare worker into `src/worker.bundle.js` with [bare-pack][bare-pack]
+- `npm run link:ios` / `npm run link:android` - link the native addons the worker loads into `react-native-bare-kit` with [bare-link][bare-link]; `postinstall` runs both
 - `npm run bundle:react-native` - write the iOS and Android JavaScript bundles to `out/`
 - `npm run build` - assemble `dist/` with [pear-build][pear-build], including `package.json`, `pear.json`, and the per-host OTA payloads
 - `npm run update` - `bundle:bare`, `bundle:react-native` and `build` in sequence
@@ -468,6 +471,7 @@ Apache-2.0
 [pear-build]: https://github.com/holepunchto/pear-build
 [pear-link]: https://github.com/holepunchto/pear-link
 [bare-pack]: https://github.com/holepunchto/bare-pack
+[bare-link]: https://github.com/holepunchto/bare-link
 [react-native-bare-kit]: https://github.com/holepunchto/bare-kit
 [expo]: https://docs.expo.dev
 [react-native]: https://reactnative.dev
