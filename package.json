@@ -1,7 +1,7 @@
 {
   "name": "hello-pear-react-native",
   "productName": "HelloPear",
-  "version": "1.0.0",
+  "version": "0.0.0-rc.0",
   "upgrade": "pear://<YOUR_KEY_HERE>",
   "main": "index.ts",
   "scripts": {
@@ -33,8 +33,8 @@
   "dependencies": {
     "b4a": "^1.8.0",
     "bare-path": "^3.1.2",
-    "bare-storage": "^1.1.0",
-    "corestore": "^7.15.0",
+    "bare-storage": "^1.1.1",
+    "corestore": "^7.16.1",
     "expo": "^55.0.8",
     "expo-build-properties": "~55.0.10",
     "expo-linear-gradient": "~55.0.15",

@@ -46,6 +46,11 @@ facts.
   to `linked:` specifiers that `react-native-bare-kit` has prelinked as xcframeworks /
   `.so`s. Adding a worker dependency with a native addon that BareKit does not already
   vendor will bundle fine and then fail to link at runtime.
+- `react-native-bare-kit` is pinned to `0.15.6` to include both a compatible Bare
+  runtime and automatic addon linking. `0.12.3` lacks `js_get_object_type`, required by
+  `bare-type@1.4.0`, and crashes at worker startup. `0.16` removes automatic addon
+  linking; `0.17` also removes the embedded runtime and needs a different native
+  integration before it can run this worker.
 - Worklets are **suspended and resumed with the app**: `react-native-bare-kit` registers
   a global `AppState` listener that calls `suspend()` on `background` and `resume()` on
   `active` for every live worklet. Backgrounded P2P work stops; do not assume the swarm
