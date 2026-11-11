@@ -49,7 +49,7 @@
     "pear-runtime-react-native": "^3.0.1",
     "react": "19.2.0",
     "react-native": "0.83.2",
-    "react-native-bare-kit": "^0.12.0",
+    "react-native-bare-kit": "^0.15.6",
     "which-runtime": "^1.4.0"
   },
   "devDependencies": {
