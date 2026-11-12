@@ -30,6 +30,7 @@ JavaScript cannot override that choice.
 
 ```sh
 npm install
+npm run link                 # REQUIRED after install — links native worker addons
 npm run bundle:bare          # REQUIRED before any run — builds src/worker.bundle.js
 npm run ios                  # expo run:ios
 npm run android              # expo run:android
@@ -49,6 +50,12 @@ directly. Nothing rebuilds it automatically: **after any change to `workers/main
 to a package the worker pulls in, re-run `npm run bundle:bare`** or the app keeps
 running the previous worker. A stale bundle fails silently — the app boots and the UI
 looks normal.
+
+BareKit 0.16 includes the native runtime but requires explicit addon linking.
+`npm run link` runs `link:ios` and `link:android`, writing addons into BareKit's
+directories under `node_modules`. Run it manually after dependency installation or
+reinstallation and after changing native worker dependencies, then rebuild the
+native app. Rebuild `src/worker.bundle.js` as well when worker dependencies change.
 
 The committed `package.json#upgrade` is the placeholder `pear://<YOUR_KEY_HERE>`, and
 it does not survive a boot: `PearRuntimeUpdater`'s constructor calls

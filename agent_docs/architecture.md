@@ -43,14 +43,15 @@ facts.
   `hello-pear-worker/index.js` into `workers/main.js`; its Node-builtin usage then needs
   an `imports` entry here, and its dependencies become this repo's dependencies.
 - `bare-pack` runs with `--linked` and four `--host` targets, so native addons resolve
-  to `linked:` specifiers that `react-native-bare-kit` has prelinked as xcframeworks /
-  `.so`s. Adding a worker dependency with a native addon that BareKit does not already
-  vendor will bundle fine and then fail to link at runtime.
-- `react-native-bare-kit` is pinned to `0.15.6` to include both a compatible Bare
-  runtime and automatic addon linking. `0.12.3` lacks `js_get_object_type`, required by
-  `bare-type@1.4.0`, and crashes at worker startup. `0.16` removes automatic addon
-  linking; `0.17` also removes the embedded runtime and needs a different native
-  integration before it can run this worker.
+  to `linked:` specifiers. `npm run link` uses `bare-link` to supply matching
+  `.xcframework` and `.so` addons in
+  `node_modules/react-native-bare-kit/ios/addons` and
+  `node_modules/react-native-bare-kit/android/src/main/addons`.
+- `react-native-bare-kit@0.16` includes its native runtime but does not link addons
+  automatically. Run `npm run link` after installing or reinstalling dependencies
+  and after changing native worker dependencies, then rebuild the native app.
+  These generated addon directories are removed when BareKit is reinstalled. A
+  missing addon can bundle successfully and still fail when the worklet starts.
 - Worklets are **suspended and resumed with the app**: `react-native-bare-kit` registers
   a global `AppState` listener that calls `suspend()` on `background` and `resume()` on
   `active` for every live worklet. Backgrounded P2P work stops; do not assume the swarm

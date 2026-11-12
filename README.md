@@ -90,13 +90,16 @@ The shared deployment terms are defined in the [release pipeline glossary][pear-
 
 ## Development <a name="development"></a>
 
-Two things must be in place before the app runs in any environment: a valid `upgrade` link and a freshly built worker bundle.
+Before running the app, link the native worker addons, set a valid `upgrade` link, and build the worker bundle.
 
 ### Install <a name="install"></a>
 
 ```sh
 npm install
+npm run link
 ```
+
+`npm run link` uses [bare-link][bare-link] to link the worker's native addons into BareKit's iOS and Android addon directories under `node_modules`. Run it manually after installing or reinstalling dependencies, and after changing native worker dependencies. Then rebuild the native app. Linking native addons is separate from bundling the worker's JavaScript.
 
 ### Set an upgrade link <a name="set-a-development-upgrade-link"></a>
 
@@ -403,6 +406,8 @@ Signed native builds are not configured here; [hello-pear-electron: CI Configura
 - `npm run production:ios` / `npm run production:android` - the same in release mode
 - `npm run check:upgrade` - run the `upgrade` link check on its own ([pear-link][pear-link])
 - `npm run prebuild` - `npx expo prebuild`; regenerates `ios/` and `android/` and applies the config plugin
+- `npm run link` - run `link:ios` and `link:android` to link native worker addons before rebuilding the app
+- `npm run link:ios` / `npm run link:android` - link addons into BareKit's platform-specific directories under `node_modules`
 - `npm run bundle:bare` - pack the Bare worker into `src/worker.bundle.js` with [bare-pack][bare-pack]
 - `npm run bundle:react-native` - write the iOS and Android JavaScript bundles to `out/`
 - `npm run build` - assemble `dist/` with [pear-build][pear-build], including `package.json`, `pear.json`, and the per-host OTA payloads
@@ -462,6 +467,7 @@ Apache-2.0
 [pear-build]: https://github.com/holepunchto/pear-build
 [pear-link]: https://github.com/holepunchto/pear-link
 [bare-pack]: https://github.com/holepunchto/bare-pack
+[bare-link]: https://github.com/holepunchto/bare-link
 [react-native-bare-kit]: https://github.com/holepunchto/bare-kit
 [expo]: https://docs.expo.dev
 [react-native]: https://reactnative.dev
