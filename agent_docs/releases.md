@@ -23,6 +23,11 @@ the rules for keeping them ordered are in [README](../README.md#version-manageme
   assets. React Native bundles are architecture-agnostic within a platform, which is why
   `npm run build` passes the same `out/ios/HelloPear` directory to `--ios-arm64`,
   `--ios-arm64-simulator` and `--ios-x64-simulator`.
+- Native releases need `npm run link` after dependency installation, reinstallation,
+  or native worker dependency changes. BareKit 0.16 includes the runtime, while
+  `bare-link` writes the worker addons into its platform directories under
+  `node_modules`. The native app must be rebuilt to include them; an OTA payload
+  cannot supply new native addons.
 - `pear-build` copies each app directory selected by a `--<host>` flag: it
   mirrors `dirname(<path>)` with prefix `/<basename(<path>)>` into
   `<target>/by-arch/<host>/app/`, and copies `--package` to `<target>/package.json`.
